@@ -51,3 +51,20 @@ public class UserController {
 		return ResponseEntity.status(OK).build();
 	}
 
+	@PatchMapping("/{id}")
+	public ResponseEntity<Void> update(
+		@RequestBody @Valid UserUpdateRequestDto dto,
+		@PathVariable Long id
+	) {
+		userService.update(dto, id);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(
+		@PathVariable Long id
+	) {
+		userService.delete(id);
+		return ResponseEntity.status(OK).build();
+	}
+

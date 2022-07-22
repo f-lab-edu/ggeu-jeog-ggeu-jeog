@@ -49,3 +49,16 @@ public class UserService {
 		httpSession.removeAttribute(SessionConst.USER_ID);
 	}
 
+	public void update(UserUpdateRequestDto dto, Long id) {
+		User user = userMapper.findById(id)
+			.orElseThrow(NoSuchUserException::new);
+		user.updateProfile(dto.getNickname(), passwordEncoder.encode(dto.getPassword()));
+		userMapper.update(user);
+		httpSession.setAttribute(SessionConst.USER_ID, user);
+	}
+
+	public void delete(Long userId) {
+		userMapper.delete(userId);
+		httpSession.removeAttribute(SessionConst.USER_ID);
+	}
+

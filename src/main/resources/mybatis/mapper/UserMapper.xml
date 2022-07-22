@@ -8,6 +8,22 @@
         VALUES (#{email}, #{password}, #{nickname})
     </insert>
 
+    <update id="update" parameterType="com.rollingpaper.ggeujeogggeujeog.user.domain.User">
+        UPDATE user
+        SET id = #{id},
+            email = #{email},
+            password = #{password},
+            verified = #{verified},
+            nickname = #{nickname},
+            role = #{role},
+            access_token = #{accessToken},
+            refresh_token = #{refreshToken}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM user WHERE id = #{userId}
+    </delete>
 
     <select id="findByEmail" resultType="com.rollingpaper.ggeujeogggeujeog.user.domain.User">
         SELECT id, email, password, verified, nickname, role, access_token, refresh_token
