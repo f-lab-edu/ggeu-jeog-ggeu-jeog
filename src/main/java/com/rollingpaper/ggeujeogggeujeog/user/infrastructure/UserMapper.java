@@ -10,5 +10,10 @@ import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 @Repository
 @Mapper
 public interface UserMapper {
+
 	void save(User user);
+
+	Optional<User> findByEmail(String email);
+
+	Optional<User> findById(Long id);
 }

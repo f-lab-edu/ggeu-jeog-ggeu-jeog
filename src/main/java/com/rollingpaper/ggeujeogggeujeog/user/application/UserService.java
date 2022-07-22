@@ -36,3 +36,16 @@ public class UserService {
 		userMapper.save(SignUpRequestDto.toEntity(dto));
 	}
 
+	public void signIn(SignInRequestDto dto) {
+		Optional<User> userOptional = userMapper.findByEmail(dto.getEmail());
+		userOptional.orElseThrow(NoSuchUserException::new);
+		User user = userOptional.filter(
+				u -> passwordEncoder.matches(dto.getPassword(), u.getPassword()))
+			.orElseThrow(() -> new IllegalArgumentException("패스워드가 다릅니다."));
+		httpSession.setAttribute(SessionConst.USER_ID, user);
+	}
+
+	public void signOut() {
+		httpSession.removeAttribute(SessionConst.USER_ID);
+	}
+

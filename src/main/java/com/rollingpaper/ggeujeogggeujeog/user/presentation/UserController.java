@@ -37,3 +37,17 @@ public class UserController {
 		return ResponseEntity.status(OK).build();
 	}
 
+	@PostMapping("/sign-in")
+	public ResponseEntity<Void> signIn(
+		@RequestBody @Valid SignInRequestDto dto
+	) {
+		userService.signIn(dto);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@GetMapping("/sign-out")
+	public ResponseEntity<Void> signOut() {
+		userService.signOut();
+		return ResponseEntity.status(OK).build();
+	}
+
