@@ -68,3 +68,11 @@ public class UserController {
 		return ResponseEntity.status(OK).build();
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<UserProfileResponseDto> getUserProfile(
+		@PathVariable Long id
+	) {
+		UserProfileResponseDto responseDto = userService.getUserProfile(id);
+		return ResponseEntity.ok(responseDto);
+	}
+}

@@ -62,3 +62,9 @@ public class UserService {
 		httpSession.removeAttribute(SessionConst.USER_ID);
 	}
 
+	public UserProfileResponseDto getUserProfile(Long id) {
+		User user = userMapper.findById(id)
+			.orElseThrow(NoSuchUserException::new);
+		return UserProfileResponseDto.from(user);
+	}
+}
