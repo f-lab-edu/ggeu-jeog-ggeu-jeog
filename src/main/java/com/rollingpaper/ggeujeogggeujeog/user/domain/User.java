@@ -1,8 +1,5 @@
 package com.rollingpaper.ggeujeogggeujeog.user.domain;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,13 +15,10 @@ public class User {
 	private String nickname;
 	private String accessToken;
 	private String refreshToken;
-	private LocalDateTime createdDate;
-	private LocalDateTime updatedDate;
 
 	@Builder
 	public User(Long id, String email, String password, boolean verified,
-		Role role, String nickname, String accessToken, String refreshToken, LocalDateTime createdDate,
-		LocalDateTime updatedDate) {
+		Role role, String nickname, String accessToken, String refreshToken) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
@@ -33,7 +27,10 @@ public class User {
 		this.nickname = nickname;
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
-		this.createdDate = createdDate;
-		this.updatedDate = updatedDate;
+	}
+
+	public void updateProfile(String nickname, String password) {
+		this.nickname = nickname;
+		this.password = password;
 	}
 }
