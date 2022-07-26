@@ -1,11 +1,11 @@
 -- -----------------------------------------------------
 -- Data `mydb`.`user`
 -- -----------------------------------------------------
-INSERT INTO user(id, email, verified, nickname, role) values (1, 'test@tes.com', 1, 'tester1', 'ADMIN');
-INSERT INTO user(id, email, verified, nickname, role) values (2, 'test@tes.com', 0, 'tester2', 'DEFAULT');
-INSERT INTO user(id, email, verified, nickname, role) values (3, 'test@tes.com', 0, 'tester3', 'DEFAULT');
-INSERT INTO user(id, email, verified, nickname, role) values (4, 'test@tes.com', 1, 'tester4', 'ADMIN');
-INSERT INTO user(id, email, verified, nickname, role) values (5, 'test@tes.com', 1, 'tester5', 'DEFAULT');
+INSERT INTO user(id, email, verified, nickname, role) values (1, 'test@test1.com', 1, 'tester1', 'ADMIN');
+INSERT INTO user(id, email, verified, nickname, role) values (2, 'test@test2.com', 0, 'tester2', 'DEFAULT');
+INSERT INTO user(id, email, verified, nickname, role) values (3, 'test@test3.com', 0, 'tester3', 'DEFAULT');
+INSERT INTO user(id, email, verified, nickname, role) values (4, 'test@test4.com', 1, 'tester4', 'ADMIN');
+INSERT INTO user(id, email, verified, nickname, role) values (5, 'test@test5.com', 1, 'tester5', 'DEFAULT');
 
 -- -----------------------------------------------------
 -- Data `mydb`.`board`

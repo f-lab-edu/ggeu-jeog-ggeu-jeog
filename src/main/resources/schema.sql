@@ -23,16 +23,16 @@ USE `mydb` ;
 DROP TABLE IF EXISTS `mydb`.`user` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`user` (
-                                             `id` BIGINT NOT NULL,
-                                             `email` VARCHAR(255) NULL,
+                                             `id` BIGINT NOT NULL AUTO_INCREMENT,
+                                             `email` VARCHAR(255) NOT NULL UNIQUE ,
     `password` VARCHAR(255) NULL,
-    `verified` TINYINT NOT NULL,
+    `verified` TINYINT NOT NULL DEFAULT 0,
     `nickname` VARCHAR(15) NOT NULL,
-    `role` ENUM('default', 'admin') NULL,
+    `role` ENUM('DEFAULT', 'ADMIN') NOT NULL DEFAULT 'DEFAULT',
     `access_token` VARCHAR(255) NULL,
     `refresh_token` VARCHAR(255) NULL,
-    `created_date` DATETIME NULL,
-    `updated_date` DATETIME NULL,
+    `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
 DROP TABLE IF EXISTS `mydb`.`persistence_login` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`persistence_login` (
-                                                          `id` BIGINT NOT NULL,
-                                                          `email` VARCHAR(255) NULL,
+                                                          `id` BIGINT NOT NULL AUTO_INCREMENT,
+                                                          `email` VARCHAR(255) NOT NULL,
     `token` VARCHAR(45) NULL,
     `last_used` DATETIME NULL,
     PRIMARY KEY (`id`))
@@ -57,12 +57,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`persistence_login` (
 DROP TABLE IF EXISTS `mydb`.`board` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`board` (
-                                              `id` BIGINT NOT NULL,
+                                              `id` BIGINT NOT NULL AUTO_INCREMENT,
                                               `board_title` VARCHAR(50) NOT NULL,
     `theme` ENUM('theme1', 'theme2', 'theme3') NULL,
     `is_opened` TINYINT NULL,
-    `created_time` DATETIME NULL,
-    `updated_time` DATETIME NULL,
+    `created_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_time` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_board_user_idx` (`user_id` ASC) VISIBLE,
@@ -80,13 +80,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`board` (
 DROP TABLE IF EXISTS `mydb`.`paper` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`paper` (
-                                              `id` BIGINT NOT NULL,
+                                              `id` BIGINT NOT NULL AUTO_INCREMENT,
                                               `owner_name` VARCHAR(15) NOT NULL,
     `content` VARCHAR(255) NULL,
     `content_meta` VARCHAR(255) NULL,
     `image_url` VARCHAR(255) NULL,
-    `created_date` DATETIME NULL,
-    `updated_date` DATETIME NULL,
+    `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `board_id` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
@@ -111,10 +111,10 @@ CREATE TABLE IF NOT EXISTS `mydb`.`paper` (
 DROP TABLE IF EXISTS `mydb`.`comment` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
-                                                `id` BIGINT NOT NULL,
+                                                `id` BIGINT NOT NULL AUTO_INCREMENT,
                                                 `content` VARCHAR(255) NULL,
-    `created_date` DATETIME NULL,
-    `updated_date` DATETIME NULL,
+    `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `paper_id` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
 DROP TABLE IF EXISTS `mydb`.`tag_info` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`tag_info` (
-                                                 `id` BIGINT NOT NULL,
+                                                 `id` BIGINT NOT NULL AUTO_INCREMENT,
                                                  `name` VARCHAR(10) NULL,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
@@ -151,6 +151,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`tag_info` (
 DROP TABLE IF EXISTS `mydb`.`tag` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`tag` (
+                                            `tag_id` BIGINT NOT NULL AUTO_INCREMENT,
                                             `board_id` BIGINT NOT NULL,
                                             `tag_info_id` BIGINT NOT NULL,
                                             INDEX `fk_tag_info_board1_idx` (`board_id` ASC) VISIBLE,
@@ -164,7 +165,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`tag` (
     FOREIGN KEY (`tag_info_id`)
     REFERENCES `mydb`.`tag_info` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+    PRIMARY KEY (`tag_id`))
     ENGINE = InnoDB;
 
 
