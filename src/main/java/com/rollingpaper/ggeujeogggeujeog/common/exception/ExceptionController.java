@@ -21,7 +21,7 @@ public class ExceptionController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ExceptionResponse> validExceptionHandler(MethodArgumentNotValidException exception) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(
-			"401",
+			ExceptionCode.INVALID_ARGUMENT.getErrorCode(),
 			exception.getBindingResult().getAllErrors().get(0).getDefaultMessage()
 		);
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -30,7 +30,7 @@ public class ExceptionController {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ExceptionResponse> argumentExceptionHandler(IllegalArgumentException exception) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(
-			"402",
+			ExceptionCode.ILLEGAL_PASSWORD.getErrorCode(),
 			exception.getMessage()
 		);
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
