@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.common.constant.SessionConst;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
@@ -20,6 +21,7 @@ import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.UserUpdateRequest
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class UserService {
 
