@@ -69,4 +69,8 @@ public class UserService {
 			.orElseThrow(NoSuchUserException::new);
 		return UserProfileResponseDto.from(user);
 	}
+
+	public Optional<User> getUserById(Long id) {
+		return userMapper.findById(id);
+	}
 }
