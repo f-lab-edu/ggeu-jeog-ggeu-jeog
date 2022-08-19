@@ -1,5 +1,6 @@
 package com.rollingpaper.ggeujeogggeujeog.user.application;
 
+import static com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -15,10 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
-import com.rollingpaper.ggeujeogggeujeog.user.Exception.DuplicatedEmailException;
-import com.rollingpaper.ggeujeogggeujeog.user.Exception.NoSuchUserException;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.Role;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+import com.rollingpaper.ggeujeogggeujeog.user.exception.DuplicatedEmailException;
+import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
 import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
 import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.SignInRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.SignUpRequestDto;
@@ -38,26 +37,6 @@ class UserServiceTest {
 
 	@Mock
 	private HttpSession httpSession;
-
-	public static class TestUser {
-		public static User USER1 = User.builder()
-			.id(1L)
-			.email("tester1@tester.com")
-			.password("1Q2w3e4r!@")
-			.nickname("tester1")
-			.role(Role.DEFAULT)
-			.verified(true)
-			.build();
-
-		public static User USER2 = User.builder()
-			.id(1L)
-			.email("tester2@tester.org")
-			.password("1Q2w3e4r!@#$")
-			.nickname("tester2")
-			.role(Role.DEFAULT)
-			.verified(true)
-			.build();
-	}
 
 	@Test
 	@DisplayName("중복된 이메일이 없다면 회원가입에 성공한다")
