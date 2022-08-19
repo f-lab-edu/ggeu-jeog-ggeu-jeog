@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.common.constant.SessionConst;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
-import com.rollingpaper.ggeujeogggeujeog.user.Exception.DuplicatedEmailException;
-import com.rollingpaper.ggeujeogggeujeog.user.Exception.NoSuchUserException;
+import com.rollingpaper.ggeujeogggeujeog.user.exception.DuplicatedEmailException;
+import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
 import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.SignInRequestDto;

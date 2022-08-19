@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.user.Exception;
+package com.rollingpaper.ggeujeogggeujeog.user.exception;
 
 import org.springframework.http.HttpStatus;
 
