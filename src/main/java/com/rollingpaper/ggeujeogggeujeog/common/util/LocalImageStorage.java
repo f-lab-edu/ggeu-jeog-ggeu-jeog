@@ -39,7 +39,7 @@ public class LocalImageStorage implements ImageStorage {
 			imageFile.transferTo(path);
 			return path.toString();
 		} catch (IOException e) {
-			log.info("Could not store a image file.", e);
+			log.error("Could not store a image file.", e);
 			return "";
 		}
 	}
