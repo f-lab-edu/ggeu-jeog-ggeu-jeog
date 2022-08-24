@@ -2,8 +2,6 @@ package com.rollingpaper.ggeujeogggeujeog.board.domain;
 
 import java.time.LocalDateTime;
 
-import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper">
+
+    <insert id="save" parameterType="com.rollingpaper.ggeujeogggeujeog.board.domain.Board">
+        INSERT INTO board (board_title, theme, is_opened, created_time, updated_time, user_id)
+        VALUES (#{boardTitle}, #{theme}, #{isOpened}, #{createdDate}, #{updatedDate}, #{userId})
+    </insert>
+
+    <select id="findByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto">
+        SELECT board_title, theme, is_opened, updated_time
+        FROM board
+        WHERE user_id = #{userId}
+    </select>
 </mapper>
