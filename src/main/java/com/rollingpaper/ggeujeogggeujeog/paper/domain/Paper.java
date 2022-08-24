@@ -19,13 +19,12 @@ public class Paper {
 	private String imageUrl;
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
-	private User userId;
-	private Board boardId;
+	private Long userId;
+	private Long boardId;
 
 	@Builder
 	public Paper(Long id, String ownerName, String content, String contentMeta, String imageUrl,
-		LocalDateTime createdDate, LocalDateTime updatedDate, User userId,
-		Board boardId) {
+		LocalDateTime createdDate, LocalDateTime updatedDate, Long userId, Long boardId) {
 		this.id = id;
 		this.ownerName = ownerName;
 		this.content = content;

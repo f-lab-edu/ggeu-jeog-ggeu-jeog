@@ -2,4 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.PaperMapper">
+    <select id="findById" resultType="com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper">
+        SELECT id, owner_name, content, content_meta, image_url, created_date, updated_date, user_id, board_id
+        FROM paper
+        where id = #{paperId}
+    </select>
+
+    <select id="findAllByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper">
+        SELECT id, owner_name, content, content_meta, image_url, created_date, updated_date, user_id, board_id
+        FROM paper
+        where user_id = #{userId}
+        ORDER BY id
+        LIMIT #{page}
+    </select>
+
+    <select id="findAll" resultType="com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper">
+        SELECT id, owner_name, content, content_meta, image_url, created_date, updated_date, user_id, board_id
+        FROM paper
+        where board_id = #{boardId}
+        ORDER BY id
+        LIMIT #{page}
+    </select>
+
+    <insert id="save" parameterType="com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper">
+        INSERT INTO paper (owner_name, content, content_meta, image_url, user_id, board_id)
+        VALUES (#{ownerName}, #{content}, #{contentMeta}, #{imageUrl}, #{userId}, #{boardId})
+    </insert>
 </mapper>

@@ -17,11 +17,11 @@ public class Board {
 	private boolean isOpened;
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
-	private User userId;
+	private Long userId;
 
 	@Builder
 	public Board(Long id, String boardTitle, Theme theme, boolean isOpened, LocalDateTime createdDate,
-		LocalDateTime updatedDate, User userId) {
+		LocalDateTime updatedDate, Long userId) {
 		this.id = id;
 		this.boardTitle = boardTitle;
 		this.theme = theme;
