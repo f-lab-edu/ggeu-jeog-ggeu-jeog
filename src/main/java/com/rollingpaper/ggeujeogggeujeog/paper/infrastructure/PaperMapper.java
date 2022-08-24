@@ -15,4 +15,5 @@ public interface PaperMapper {
 	void save(Paper paper);
 	List<Paper> findAll(Long boardId, int page);
 	Optional<Paper> findById(Long paperId);
+	List<Paper> findAllByUserId(Long userId, int page);
 }

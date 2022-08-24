@@ -2,6 +2,7 @@ package com.rollingpaper.ggeujeogggeujeog.paper.application;
 
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.BoardTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.PaperTestFixture.*;
+import static com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -54,7 +55,7 @@ class PaperServiceTest {
 	}
 
 	@Test
-	@DisplayName("페이퍼 리스트를 조회한다.")
+	@DisplayName("페이퍼 리스트를 보드 정보로 조회한다.")
 	void findAllPaper() {
 		//when
 		paperServiceImpl.findAllPaper(TestBoard.BOARD1.getId(), 10);
@@ -84,5 +85,15 @@ class PaperServiceTest {
 
 		//then
 		assertThrows(NoSuchPaperException.class, () -> paperServiceImpl.getPaper(any()));
+	}
+
+	@Test
+	@DisplayName("페이퍼를 리스트를 유저 정보로 조회한다.")
+	void findAllByUserId() {
+		//when
+		paperServiceImpl.findAllByUserId(TestUser.USER1.getId(), 10);
+
+		//then
+		then(paperMapper).should(times(1)).findAllByUserId(anyLong(), anyInt());
 	}
 }

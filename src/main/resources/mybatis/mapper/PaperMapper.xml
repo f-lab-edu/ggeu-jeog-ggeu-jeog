@@ -8,6 +8,14 @@
         where id = #{paperId}
     </select>
 
+    <select id="findAllByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper">
+        SELECT id, owner_name, content, content_meta, image_url, created_date, updated_date, user_id, board_id
+        FROM paper
+        where user_id = #{userId}
+        ORDER BY id
+        LIMIT #{page}
+    </select>
+
     <select id="findAll" resultType="com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper">
         SELECT id, owner_name, content, content_meta, image_url, created_date, updated_date, user_id, board_id
         FROM paper

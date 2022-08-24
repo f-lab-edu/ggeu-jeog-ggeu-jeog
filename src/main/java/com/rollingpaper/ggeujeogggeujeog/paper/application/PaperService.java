@@ -10,4 +10,5 @@ public interface PaperService {
 	void writePaper(PaperWriteRequest dto);
 	List<PaperResponseDto> findAllPaper(Long boardId, int page);
 	PaperResponseDto getPaper(Long paperId);
+	List<PaperResponseDto> findAllByUserId(Long boardId, int page);
 }

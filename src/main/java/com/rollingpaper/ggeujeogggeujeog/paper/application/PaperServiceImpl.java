@@ -47,4 +47,15 @@ public class PaperServiceImpl implements PaperService {
 			.orElseThrow(NoSuchPaperException::new);
 		return PaperResponseDto.from(paper);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<PaperResponseDto> findAllByUserId(Long userId, int page) {
+		return paperMapper.findAllByUserId(userId, page)
+			.stream()
+			.map(paper -> new PaperResponseDto(paper.getOwnerName(), paper.getImageUrl(),
+				paper.getContent(), paper.getContentMeta(),
+				paper.getCreatedDate(), paper.getUpdatedDate()))
+			.collect(Collectors.toList());
+	}
 }
