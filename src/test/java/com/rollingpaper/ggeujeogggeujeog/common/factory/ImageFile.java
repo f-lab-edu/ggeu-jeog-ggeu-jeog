@@ -20,7 +20,7 @@ public class ImageFile {
 		return imageFormat.format;
 	}
 
-	public static MockMultipartFile MockImageFileFactory(String imageName, ImageFormat imageFormat) {
+	public static MockMultipartFile createMockFile(String imageName, ImageFormat imageFormat) {
 		switch (imageFormat) {
 			case JPEG:
 				return new MockMultipartFile(
