@@ -8,7 +8,7 @@ import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperWriteReques
 public interface PaperService {
 
 	void writePaper(PaperWriteRequest dto);
-	List<PaperResponseDto> findAllPaper(Long boardId, int page);
+	List<PaperResponseDto> findAllPapers(Long boardId, int page);
 	PaperResponseDto getPaper(Long paperId);
 	List<PaperResponseDto> findAllByUserId(Long boardId, int page);
 }

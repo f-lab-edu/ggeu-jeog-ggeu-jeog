@@ -31,7 +31,7 @@ public class PaperServiceImpl implements PaperService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<PaperResponseDto> findAllPaper(Long boardId, int page) {
+	public List<PaperResponseDto> findAllPapers(Long boardId, int page) {
 		return paperMapper.findAll(boardId, page)
 			.stream()
 			.map(paper -> new PaperResponseDto(paper.getOwnerName(), paper.getImageUrl(),

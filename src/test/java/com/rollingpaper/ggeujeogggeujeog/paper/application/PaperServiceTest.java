@@ -58,7 +58,7 @@ class PaperServiceTest {
 	@DisplayName("페이퍼 리스트를 보드 정보로 조회한다.")
 	void findAllPaper() {
 		//when
-		paperServiceImpl.findAllPaper(TestBoard.BOARD1.getId(), 10);
+		paperServiceImpl.findAllPapers(TestBoard.BOARD1.getId(), 10);
 
 		//then
 		then(paperMapper).should(times(1)).findAll(anyLong(), anyInt());
