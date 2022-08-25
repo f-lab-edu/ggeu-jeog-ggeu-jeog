@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.springframework.session', name: 'spring-session-data-redis'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
