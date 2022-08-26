@@ -16,4 +16,10 @@ public class PaperUpdateRequestDto {
 
 	@NotNull
 	private String contentMeta;
+
+	public PaperUpdateRequestDto(String ownerName, String content, String contentMeta) {
+		this.ownerName = ownerName;
+		this.content = content;
+		this.contentMeta = contentMeta;
+	}
 }
