@@ -28,4 +28,23 @@
         INSERT INTO paper (owner_name, content, content_meta, image_url, user_id, board_id)
         VALUES (#{ownerName}, #{content}, #{contentMeta}, #{imageUrl}, #{userId}, #{boardId})
     </insert>
+
+    <update id="update" parameterType="com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper">
+        UPDATE paper
+        SET id = #{id},
+            owner_name = #{ownerName},
+            content = #{content},
+            content_meta = #{contentMeta},
+            image_url = #{imageUrl},
+            created_date = #{createdDate},
+            updated_date = #{updatedDate},
+            user_id = #{userId},
+            board_id = #{boardId}
+        WHERE id = #{paperId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM paper WHERE id = #{paperId}
+    </delete>
+
 </mapper>

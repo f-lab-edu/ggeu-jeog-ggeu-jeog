@@ -2,8 +2,7 @@ package com.rollingpaper.ggeujeogggeujeog.paper.domain;
 
 import java.time.LocalDateTime;
 
-import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperUpdateRequestDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -34,5 +33,28 @@ public class Paper {
 		this.updatedDate = updatedDate;
 		this.userId = userId;
 		this.boardId = boardId;
+	}
+
+	private void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	private void setContent(String content) {
+		this.content = content;
+	}
+
+	private void setContentMeta(String contentMeta) {
+		this.contentMeta = contentMeta;
+	}
+
+	private void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public void updatePaper(PaperUpdateRequestDto dto, String imageUrl) {
+		setOwnerName(dto.getOwnerName());
+		setContent(dto.getContent());
+		setContentMeta(dto.getContentMeta());
+		setImageUrl(imageUrl);
 	}
 }

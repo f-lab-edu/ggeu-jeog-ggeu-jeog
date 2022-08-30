@@ -1,17 +1,19 @@
 package com.rollingpaper.ggeujeogggeujeog.board.application;
 
-import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
-import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
-import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
-import com.rollingpaper.ggeujeogggeujeog.user.Exception.NoSuchUserException;
-import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
+import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Transactional
