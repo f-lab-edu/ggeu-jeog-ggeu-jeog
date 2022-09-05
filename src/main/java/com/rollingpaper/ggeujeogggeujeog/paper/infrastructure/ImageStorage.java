@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.common.util;
+package com.rollingpaper.ggeujeogggeujeog.paper.infrastructure;
 
 import java.io.IOException;
 
@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageStorage {
 
-	void init() throws IOException;
+	default void init() throws IOException {};
 	String store(MultipartFile imageFile);
 }
