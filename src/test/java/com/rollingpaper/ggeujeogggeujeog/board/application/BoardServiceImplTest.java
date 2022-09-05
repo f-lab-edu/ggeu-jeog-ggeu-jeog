@@ -1,14 +1,10 @@
 package com.rollingpaper.ggeujeogggeujeog.board.application;
 
+import static com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture.*;
 import static org.mockito.BDDMockito.*;
 
-import com.rollingpaper.ggeujeogggeujeog.board.domain.Theme;
-import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
-import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
-import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.Role;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
-import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.SignUpRequestDto;
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
+import com.rollingpaper.ggeujeogggeujeog.board.domain.Theme;
+import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
+import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.SignUpRequestDto;
 
 @ExtendWith(MockitoExtension.class)
 class BoardServiceImplTest {
@@ -29,18 +29,6 @@ class BoardServiceImplTest {
 
     @Mock
     private UserService userService;
-
-    public static class TestUser {
-        public static User USER1 = User.builder()
-                .id(1L)
-                .email("tester1@tester.com")
-                .password("Abcdefg1!")
-                .nickname("tester1")
-                .role(Role.DEFAULT)
-                .verified(true)
-                .build();
-    }
-
 
     @Test
     @DisplayName("서비스의 회원인 사용자는 보드 등록에 성공한다.")
