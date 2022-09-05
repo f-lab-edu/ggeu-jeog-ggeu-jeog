@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rollingpaper.ggeujeogggeujeog.comment.infrastructure.CommentMapper">
+    <insert id="save" parameterType="com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment">
+        INSERT INTO comment (content, user_id, paper_id)
+        VALUES (#{content}, #{userId}, #{paperId})
+    </insert>
+
+    <select id="findComment" resultType="com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment">
+        SELECT *
+        from comment
+        where paper_id = #{paperId}
+    </select>
+
+    <select id="findAllByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment">
+        SELECT *
+        from comment
+        where user_id = #{userId}
+    </select>
 </mapper>
