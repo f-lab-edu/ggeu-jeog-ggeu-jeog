@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
+import com.rollingpaper.ggeujeogggeujeog.board.exception.BoardOwnerException;
+import com.rollingpaper.ggeujeogggeujeog.board.exception.NoSuchBoardException;
 import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
+import com.rollingpaper.ggeujeogggeujeog.common.exception.BaseException;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
@@ -17,7 +20,6 @@ import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class BoardServiceImpl implements BoardService {
 
@@ -38,6 +40,29 @@ public class BoardServiceImpl implements BoardService {
             .map(board -> new UserBoardResponseDto(board.getBoardTitle(),
             board.getTheme(), board.isOpened(), board.getUpdatedDate()))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteBoard(Long boardId, User user) {
+        checkBoardOwner(boardId, user);
+        boardMapper.delete(boardId);
+    }
+
+    @Override
+    @Transactional
+    public void updateBoard(BoardRequestDto dto, Long boardId, User user) {
+        checkBoardOwner(boardId, user);
+        boardMapper.update(BoardRequestDto.toEntity(dto, user), boardId);
+    }
+
+    @Transactional
+    public Board checkBoardOwner(Long boardId, User user) throws BaseException {
+        Board board = boardMapper.findById(boardId).orElseThrow(NoSuchBoardException::new);
+        if (!board.getUserId().equals(user.getId())) {
+            throw new BoardOwnerException();
+        }
+        return board;
     }
 
 }

@@ -1,8 +1,10 @@
 package com.rollingpaper.ggeujeogggeujeog.board.infrastructure;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
@@ -12,4 +14,7 @@ import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
 public interface BoardMapper {
     void save(Board board);
     List<Board> findByUserId(Long userId);
+    void delete(Long boardId);
+    void update(@Param("Board") Board board, @Param("BoardId") Long boardId);
+    Optional<Board> findById(Long boardId);
 }
