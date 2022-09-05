@@ -1,6 +1,5 @@
 package com.rollingpaper.ggeujeogggeujeog.board.presentation.dto;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.validation.constraints.NotBlank;
@@ -38,8 +37,6 @@ public class BoardRequestDto {
                 .boardTitle(dto.boardTitle)
                 .isOpened(dto.isOpened)
                 .theme(dto.theme)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
                 .userId(user.getId())
                 .build();
     }
