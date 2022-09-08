@@ -1,14 +1,16 @@
 package com.rollingpaper.ggeujeogggeujeog.board.presentation.dto;
 
-import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
-import com.rollingpaper.ggeujeogggeujeog.board.domain.Theme;
-import lombok.Builder;
-import lombok.Getter;
+import java.util.Objects;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import java.util.Objects;
+
+import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
+import com.rollingpaper.ggeujeogggeujeog.board.domain.Theme;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 public class BoardRequestDto {
@@ -30,14 +32,12 @@ public class BoardRequestDto {
         this.isOpened = Objects.requireNonNullElse(isOpened, false);
     }
 
-    public static Board toEntity(BoardRequestDto dto, Long userId) {
+    public static Board toEntity(BoardRequestDto dto, User user) {
         return Board.builder()
                 .boardTitle(dto.boardTitle)
                 .isOpened(dto.isOpened)
                 .theme(dto.theme)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
-                .userId(userId)
+                .userId(user.getId())
                 .build();
     }
 }

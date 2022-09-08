@@ -8,9 +8,21 @@
         VALUES (#{boardTitle}, #{theme}, #{isOpened}, #{createdDate}, #{updatedDate}, #{userId})
     </insert>
 
-    <select id="findByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto">
+    <select id="findByUserId" resultType="ccom.rollingpaper.ggeujeogggeujeog.board.domain.Board">
         SELECT board_title, theme, is_opened, updated_time
         FROM board
         WHERE user_id = #{userId}
     </select>
+    
+    <delete id="delete">
+        DELETE FROM board WHERE id = #{boardId}
+    </delete>
+    
+    <update id="update">
+        UPDATE board
+        SET board_title = #{Board.boardTitle},
+            theme = #{Board.theme},
+            is_opened = #{Board.isOpened}
+        WHERE id = #{BoardId.boardId}
+    </update>
 </mapper>
