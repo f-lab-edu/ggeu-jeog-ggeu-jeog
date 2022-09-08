@@ -18,4 +18,14 @@
         from comment
         where user_id = #{userId}
     </select>
+
+    <delete id="delete">
+        DELETE FROM comment WHERE paper_id = #{paperId}
+    </delete>
+
+    <update id="update" parameterType="com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment">
+        UPDATE comment
+        SET content = #{content}
+        WHERE paper_id = #{paperId}
+    </update>
 </mapper>

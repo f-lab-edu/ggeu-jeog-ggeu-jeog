@@ -13,4 +13,16 @@
         FROM board
         WHERE user_id = #{userId}
     </select>
+    
+    <delete id="delete">
+        DELETE FROM board WHERE id = #{boardId}
+    </delete>
+    
+    <update id="update">
+        UPDATE board
+        SET board_title = #{Board.boardTitle},
+            theme = #{Board.theme},
+            is_opened = #{Board.isOpened}
+        WHERE id = #{BoardId.boardId}
+    </update>
 </mapper>

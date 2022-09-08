@@ -1,5 +1,6 @@
 package com.rollingpaper.ggeujeogggeujeog.comment.application;
 
+import static com.rollingpaper.ggeujeogggeujeog.common.fixture.BoardTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.CommentTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.PaperTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture.*;
@@ -17,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
 import com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment;
 import com.rollingpaper.ggeujeogggeujeog.comment.infrastructure.CommentMapper;
 import com.rollingpaper.ggeujeogggeujeog.comment.presentation.dto.CommentResponseDto;
@@ -31,6 +33,9 @@ class CommentServiceTest {
 	@Mock
 	private CommentMapper commentMapper;
 
+	@Mock
+	private BoardService boardService;
+
 	@Test
 	@DisplayName("페이퍼에 댓글 등록을 성공한다.")
 	void addComment() {
@@ -41,8 +46,9 @@ class CommentServiceTest {
 		//when
 		commentService.writeComment(
 			commentWriteRequestDto,
+			TestBoard.BOARD1.getId(),
 			TestPaper.PAPER1.getId(),
-			TestUser.USER1.getId()
+			TestUser.USER1
 		);
 
 		//then
@@ -74,5 +80,32 @@ class CommentServiceTest {
 
 		//then
 		assertThat(commentsByUser).usingRecursiveComparison().isEqualTo(comments);
+	}
+
+	@Test
+	@DisplayName("보드 소유자가 댓글을 삭제할 수 있다.")
+	void deleteComment() {
+		//given
+		given(boardService.checkBoardOwner(anyLong(), any())).willReturn(TestBoard.BOARD1);
+
+		//when
+		commentService.deleteComment(TestBoard.BOARD1.getId(), TestPaper.PAPER1.getId(), TestUser.USER1);
+
+		//then
+		then(commentMapper).should(times(1)).delete(anyLong());
+	}
+
+	@Test
+	@DisplayName("보드 소유자가 댓글을 수정할 수 있다.")
+	void updateComment() {
+		//given
+		CommentWriteRequestDto dto = new CommentWriteRequestDto("test-content");
+		given(boardService.checkBoardOwner(anyLong(), any())).willReturn(TestBoard.BOARD1);
+
+		//when
+		commentService.updateComment(dto, TestBoard.BOARD1.getId(), TestPaper.PAPER1.getId(), TestUser.USER1);
+
+		//then
+		then(commentMapper).should(times(1)).update(any());
 	}
 }
