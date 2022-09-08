@@ -3,9 +3,12 @@ package com.rollingpaper.ggeujeogggeujeog.paper.application;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.BoardTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.PaperTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +19,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.ImageTestFixture;
-import com.rollingpaper.ggeujeogggeujeog.common.util.ImageStorage;
+import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
 import com.rollingpaper.ggeujeogggeujeog.paper.exception.NoSuchPaperException;
+import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.ImageStorage;
 import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.PaperMapper;
+import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperUpdateRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperWriteRequest;
 
@@ -91,11 +96,15 @@ class PaperServiceTest {
 	@Test
 	@DisplayName("페이퍼를 리스트를 유저 정보로 조회한다.")
 	void findAllByUserId() {
+		//given
+		List<Paper> papers = Arrays.asList(TestPaper.PAPER1, TestPaper.PAPER2);
+		when(paperMapper.findAllByUserId(anyLong(), anyInt())).thenReturn(papers);
+
 		//when
-		paperServiceImpl.findAllByUserId(TestUser.USER1.getId(), 10);
+		List<PaperResponseDto> papersByUser = paperServiceImpl.findAllByUserId(TestUser.USER1.getId(), 10);
 
 		//then
-		then(paperMapper).should(times(1)).findAllByUserId(anyLong(), anyInt());
+		assertThat(papersByUser).usingRecursiveComparison().isEqualTo(papers);
 	}
 
 	@Test
