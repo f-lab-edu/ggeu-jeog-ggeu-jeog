@@ -20,3 +20,11 @@ logging:
     root: debug
   file:
     path:
+
+ncp:
+  storage:
+    end-point: https://kr.object.ncloudstorage.com
+    region: kr-standard
+    access-key: ${NCP_ACCESSKEY}
+    secret-key: ${NCP_SECRETKEY}
+    bucket: rollingpaperimage

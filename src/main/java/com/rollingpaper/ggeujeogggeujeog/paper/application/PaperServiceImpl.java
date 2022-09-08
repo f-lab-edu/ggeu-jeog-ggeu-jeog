@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.rollingpaper.ggeujeogggeujeog.common.util.ImageStorage;
+import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.ImageStorage;
 import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
 import com.rollingpaper.ggeujeogggeujeog.paper.exception.NoSuchPaperException;
 import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.PaperMapper;

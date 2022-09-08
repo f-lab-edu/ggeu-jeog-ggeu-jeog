@@ -1,38 +1,68 @@
 package com.rollingpaper.ggeujeogggeujeog.board.presentation;
 
-import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
-import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
-import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.OK;
+import javax.validation.Valid;
 
-@RequestMapping("/api/users")
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.CurrentUser;
+import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+
+import lombok.RequiredArgsConstructor;
+
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class BoardController {
     private final BoardService boardService;
 
-    @PostMapping("/{id}/boards")
+    @PostMapping("/boards")
     public ResponseEntity<Void> write(
             @RequestBody @Valid BoardRequestDto dto,
-            @PathVariable Long id
+            @CurrentUser User user
     ) {
-        boardService.register(dto, id);
+        boardService.register(dto, user.getId());
         return ResponseEntity.status(OK).build();
     }
 
-    @GetMapping("/{id}/boards")
+    @GetMapping("/boards")
     public ResponseEntity<List<UserBoardResponseDto>> getUserBoard(
-            @PathVariable Long id
+        @CurrentUser User user
     ) {
-        List<UserBoardResponseDto> userBoard = boardService.getUserBoard(id);
+        List<UserBoardResponseDto> userBoard = boardService.getUserBoard(user.getId());
         return ResponseEntity.ok(userBoard);
+    }
+
+    @DeleteMapping("/boards/{boardId}")
+    public ResponseEntity<Void> deleteBoard(
+        @PathVariable Long boardId,
+        @CurrentUser User user
+    ) {
+        boardService.deleteBoard(boardId, user);
+        return ResponseEntity.status(OK).build();
+    }
+
+    @PatchMapping("/boards/{boardId}")
+    public ResponseEntity<Void> updateBoard(
+        @PathVariable Long boardId,
+        @RequestBody @Valid BoardRequestDto dto,
+        @CurrentUser User user
+    ) {
+        boardService.updateBoard(dto, boardId, user);
+        return ResponseEntity.status(OK).build();
     }
 }

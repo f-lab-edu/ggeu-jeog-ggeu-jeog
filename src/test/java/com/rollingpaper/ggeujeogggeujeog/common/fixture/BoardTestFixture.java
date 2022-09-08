@@ -13,5 +13,13 @@ public class BoardTestFixture {
 			.isOpened(false)
 			.userId(UserTestFixture.TestUser.USER1.getId())
 			.build();
+
+		public static Board BOARD2 = Board.builder()
+			.id(2L)
+			.boardTitle("test-title-2")
+			.theme(Theme.THEME1)
+			.isOpened(false)
+			.userId(UserTestFixture.TestUser.USER2.getId())
+			.build();
 	}
 }
