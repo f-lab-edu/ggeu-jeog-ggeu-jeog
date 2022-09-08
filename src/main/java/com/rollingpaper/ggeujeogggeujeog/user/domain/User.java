@@ -1,12 +1,14 @@
 package com.rollingpaper.ggeujeogggeujeog.user.domain;
 
+import java.io.Serializable;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
 	private Long id;
 	private String email;
 	private String password;
