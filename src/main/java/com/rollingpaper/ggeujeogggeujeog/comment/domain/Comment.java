@@ -2,9 +2,6 @@ package com.rollingpaper.ggeujeogggeujeog.comment.domain;
 
 import java.time.LocalDateTime;
 
-import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +13,12 @@ public class Comment {
 	private String content;
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
-	private User userId;
-	private Paper paperId;
+	private Long userId;
+	private Long paperId;
 
 	@Builder
-	public Comment(Long id, String content, LocalDateTime createdDate, LocalDateTime updatedDate,
-		User userId, Paper paperId) {
+	public Comment(Long id, String content, LocalDateTime createdDate, LocalDateTime updatedDate, Long userId,
+		Long paperId) {
 		this.id = id;
 		this.content = content;
 		this.createdDate = createdDate;

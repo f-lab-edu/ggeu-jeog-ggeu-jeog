@@ -7,7 +7,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,46 +19,67 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.CurrentUser;
 import com.rollingpaper.ggeujeogggeujeog.paper.application.PaperService;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperResponseDto;
+import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperUpdateRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperWriteRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class PaperController {
 
 	private final PaperService paperService;
 
-	@PostMapping("/{userId}/boards/{boardId}/rollingpapers")
-	ResponseEntity<Void> writePaper(
+	@PostMapping("/boards/{boardId}/rollingpapers")
+	public ResponseEntity<Void> writePaper(
 		@RequestPart(value = "request") @Valid PaperWriteRequestDto dto,
 		@RequestPart(value = "image") MultipartFile imageFile,
 		@PathVariable Long boardId,
-		@PathVariable Long userId
+		@CurrentUser User user
 	) {
 		paperService.writePaper(
-			PaperAssembler.assembleWriteDto(dto, imageFile, boardId, userId)
+			PaperAssembler.assembleWriteDto(dto, imageFile, boardId, user.getId())
 		);
 		return ResponseEntity.status(OK).build();
 	}
 
-	@GetMapping("/{userId}/boards/{boardId}/rollingpapers/all")
-	ResponseEntity<List<PaperResponseDto>> findAllPaper(
+	@GetMapping("/boards/{boardId}/rollingpapers")
+	public ResponseEntity<List<PaperResponseDto>> findAllPapers(
 		@PathVariable Long boardId,
 		@RequestParam(value = "page", defaultValue = "10") int page
 	) {
-		List<PaperResponseDto> paperResponseDtos = paperService.findAllPaper(boardId, page);
+		List<PaperResponseDto> paperResponseDtos = paperService.findAllPapers(boardId, page);
 		return ResponseEntity.ok(paperResponseDtos);
 	}
 
-	@GetMapping("/{userId}/boards/{boardId}/rollingpapers/{paperId}")
-	ResponseEntity<PaperResponseDto> getPaper(
+	@GetMapping("/boards/{boardId}/rollingpapers/{paperId}")
+	public ResponseEntity<PaperResponseDto> getPaper(
 		@PathVariable Long paperId
 	) {
 		PaperResponseDto paperResponseDto = paperService.getPaper(paperId);
 		return ResponseEntity.ok(paperResponseDto);
+	}
+
+	@PatchMapping("/boards/{boardId}/rollingpapers/{paperId}")
+	public ResponseEntity<Void> update(
+		@RequestBody @Valid PaperUpdateRequestDto dto,
+		@RequestPart(value = "image") MultipartFile imageFile,
+		@PathVariable Long paperId
+	) {
+		paperService.update(dto, imageFile, paperId);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@DeleteMapping("/boards/{boardId}/rollingpapers/{paperId}")
+	public ResponseEntity<Void> delete(
+		@PathVariable Long paperId
+	) {
+		paperService.delete(paperId);
+		return ResponseEntity.status(OK).build();
 	}
 }

@@ -5,12 +5,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.rollingpaper.ggeujeogggeujeog.common.util.ImageStorage;
-import com.rollingpaper.ggeujeogggeujeog.paper.exception.NoSuchPaperException;
-import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperResponseDto;
+import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.ImageStorage;
 import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
+import com.rollingpaper.ggeujeogggeujeog.paper.exception.NoSuchPaperException;
 import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.PaperMapper;
+import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperResponseDto;
+import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperUpdateRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperWriteRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class PaperServiceImpl implements PaperService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<PaperResponseDto> findAllPaper(Long boardId, int page) {
+	public List<PaperResponseDto> findAllPapers(Long boardId, int page) {
 		return paperMapper.findAll(boardId, page)
 			.stream()
 			.map(paper -> new PaperResponseDto(paper.getOwnerName(), paper.getImageUrl(),
@@ -57,5 +59,21 @@ public class PaperServiceImpl implements PaperService {
 				paper.getContent(), paper.getContentMeta(),
 				paper.getCreatedDate(), paper.getUpdatedDate()))
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional
+	public void update(PaperUpdateRequestDto dto, MultipartFile imageFile, Long paperId) {
+		String imageUrl = imageStorage.store(imageFile);
+		Paper paper = paperMapper.findById(paperId)
+			.orElseThrow(NoSuchPaperException::new);
+		paper.updatePaper(dto, imageUrl);
+		paperMapper.update(paper);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long paperId) {
+		paperMapper.delete(paperId);
 	}
 }
