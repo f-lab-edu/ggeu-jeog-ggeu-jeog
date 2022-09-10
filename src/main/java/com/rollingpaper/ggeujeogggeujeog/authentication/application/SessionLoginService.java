@@ -7,12 +7,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignInRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.common.constant.SessionConst;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+import com.rollingpaper.ggeujeogggeujeog.user.exception.DuplicatedEmailException;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
 import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
-import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignInRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,5 +45,16 @@ public class SessionLoginService implements LoginService {
 	@Override
 	public Long getUserId() {
 		return (Long) httpSession.getAttribute(SessionConst.USER_ID);
+	}
+
+	@Override
+	@Transactional
+	public void register(SignUpRequestDto dto) {
+		userMapper.findByEmail(dto.getEmail())
+			.ifPresent(user -> {
+				throw new DuplicatedEmailException();
+			});
+		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+		userMapper.save(SignUpRequestDto.toEntity(dto));
 	}
 }

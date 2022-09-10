@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rollingpaper.ggeujeogggeujeog.authentication.application.LoginService;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignInRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,14 @@ public class AuthController {
 	@GetMapping("/sign-out")
 	public ResponseEntity<Void> signOut() {
 		loginService.signOut();
+		return ResponseEntity.status(OK).build();
+	}
+
+	@PostMapping
+	public ResponseEntity<Void> signUp(
+		@RequestBody @Valid SignUpRequestDto dto
+	) {
+		loginService.register(dto);
 		return ResponseEntity.status(OK).build();
 	}
 }
