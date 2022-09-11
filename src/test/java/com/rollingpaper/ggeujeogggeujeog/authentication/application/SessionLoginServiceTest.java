@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignInRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.VerifyEmailRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.DuplicatedEmailException;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
@@ -36,6 +37,9 @@ class SessionLoginServiceTest {
 
 	@Mock
 	private PasswordEncoder passwordEncoder;
+
+	@Mock
+	private EmailVerificationService emailVerificationService;
 
 	@Test
 	@DisplayName("회원이 존재하고 패스워드가 일치하면 로그인에 성공한다")
@@ -106,5 +110,43 @@ class SessionLoginServiceTest {
 
 		//then
 		assertThrows(DuplicatedEmailException.class, () -> sessionLoginService.register(dto));
+	}
+
+	@Test
+	@DisplayName("가입 시 사용자를 DB에 저장했다면, 인증 이메일을 전송한다.")
+	void sendEmailWhenSavingSuccess() {
+		//given
+		SignUpRequestDto dto = SignUpRequestDto.builder()
+			.email(TestUser.USER1.getEmail())
+			.password(TestUser.USER1.getPassword())
+			.nickname(TestUser.USER1.getNickname())
+			.build();
+		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(null));
+		given(passwordEncoder.encode(any())).willReturn("encoded-Password");
+
+		//when
+		sessionLoginService.register(dto);
+
+		//then
+		then(userMapper).should(times(1)).findByEmail(dto.getEmail());
+		then(userMapper).should(times(1)).save(any());
+		then(emailVerificationService).should(times(1)).sendRegistrationMail(any(), any());
+	}
+
+	@Test
+	@DisplayName("사용자 가입 인증에 성공한다면 사용자 정보를 수정한다.")
+	void updateUserWhenVerificationSuccess() {
+		//given
+		VerifyEmailRequestDto dto = new VerifyEmailRequestDto(
+			"test@email.com",
+			"token"
+		);
+		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(TestUser.USER1));
+
+		//when
+		sessionLoginService.confirmRegistration(dto);
+
+		//then
+		then(userMapper).should(times(1)).update(TestUser.USER1);
 	}
 }
