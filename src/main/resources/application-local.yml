@@ -5,15 +5,29 @@ spring:
       location:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:/mydb
+    url: jdbc:mysql://localhost:1234/mydb
     username: root
-    password:
+    password: ${LOCAL_DB_PASSWORD}
   session:
     store-type: redis
   redis:
     host: localhost
-    password:
-    port:
+    password: ${LOCAL_REDIS_PASSWORD}
+    port: 16379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
 
 mybatis:
   mapper-locations: classpath:/mybatis/mapper/*.xml

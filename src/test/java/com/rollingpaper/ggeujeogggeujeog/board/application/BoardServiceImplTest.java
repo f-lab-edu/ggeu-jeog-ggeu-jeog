@@ -19,7 +19,7 @@ import com.rollingpaper.ggeujeogggeujeog.board.exception.BoardOwnerException;
 import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
-import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.SignUpRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 
 @ExtendWith(MockitoExtension.class)
 class BoardServiceImplTest {
@@ -44,7 +44,6 @@ class BoardServiceImplTest {
                 .build();
 
         given(userService.getUserById(1L)).willReturn(Optional.of(TestUser.USER1));
-        userService.register(userDto);
 
         BoardRequestDto boardDto = BoardRequestDto.builder()
                 .boardTitle("Test Board Title")
