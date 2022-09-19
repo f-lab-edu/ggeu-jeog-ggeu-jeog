@@ -62,7 +62,7 @@ public class SessionLoginService implements LoginService {
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 		userMapper.save(SignUpRequestDto.toEntity(dto));
 		String uuid = UUID.randomUUID().toString();
-		log.debug(dto.getEmail() + " : " + uuid + " has been created.");
+		log.debug("{} {} has been created", dto.getEmail(), uuid);
 		emailVerificationService.sendRegistrationMail(dto.getEmail(), uuid);
 	}
 
