@@ -35,4 +35,8 @@ public class User implements Serializable {
 		this.nickname = nickname;
 		this.password = password;
 	}
+
+	public void verifiedUser() {
+		this.verified = true;
+	}
 }

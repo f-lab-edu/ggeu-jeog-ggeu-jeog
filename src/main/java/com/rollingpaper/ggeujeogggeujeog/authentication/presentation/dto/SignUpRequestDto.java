@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.user.presentation.dto;
+package com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

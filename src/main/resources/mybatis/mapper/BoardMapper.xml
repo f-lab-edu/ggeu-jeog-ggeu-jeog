@@ -8,7 +8,7 @@
         VALUES (#{boardTitle}, #{theme}, #{isOpened}, #{createdDate}, #{updatedDate}, #{userId})
     </insert>
 
-    <select id="findByUserId" resultType="ccom.rollingpaper.ggeujeogggeujeog.board.domain.Board">
+    <select id="findByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.board.domain.Board">
         SELECT board_title, theme, is_opened, updated_time
         FROM board
         WHERE user_id = #{userId}

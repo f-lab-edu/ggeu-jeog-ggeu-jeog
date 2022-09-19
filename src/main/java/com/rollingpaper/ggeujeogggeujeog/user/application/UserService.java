@@ -6,14 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.authentication.application.LoginService;
+import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.UserUpdateRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
-import com.rollingpaper.ggeujeogggeujeog.user.exception.DuplicatedEmailException;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
 import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
-import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.SignUpRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.UserProfileResponseDto;
-import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.UserUpdateRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,18 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserMapper userMapper;
-	private final LoginService loginService;
 	private final PasswordEncoder passwordEncoder;
-
-	@Transactional
-	public void register(SignUpRequestDto dto) {
-		userMapper.findByEmail(dto.getEmail())
-				.ifPresent(user -> {
-					throw new DuplicatedEmailException();
-				});
-		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-		userMapper.save(SignUpRequestDto.toEntity(dto));
-	}
+	private final LoginService loginService;
 
 	@Transactional
 	public void update(UserUpdateRequestDto dto, Long id) {
