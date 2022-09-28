@@ -25,3 +25,8 @@ INSERT INTO paper(id, owner_name, user_id, board_id) values (3, 'test-owner-5', 
 -- -----------------------------------------------------
 INSERT INTO comment(id, user_id, paper_id) values (1, 1, 1);
 INSERT INTO comment(id, user_id, paper_id) values (2, 5, 3);
+-- -----------------------------------------------------
+-- Data `mydb`.`notification`
+-- -----------------------------------------------------
+INSERT INTO notification(id, title, content, type, type_id, status, user_id) values (1, 'test-noti-1', 'test-noti-content-1', 'PAPER', '1','ALIVE', 1);
+INSERT INTO notification(id, title, content, type, type_id, status, user_id) values (3, 'test-noti-3', 'test-noti-content-3', 'COMMENT', '1', 'DELETED', 1);

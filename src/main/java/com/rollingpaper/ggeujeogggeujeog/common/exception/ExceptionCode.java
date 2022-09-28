@@ -9,7 +9,8 @@ public enum ExceptionCode {
 	NO_SUCH_PAPER("201"),
 	NO_SUCH_COMMENT("301"),
 	ILLEGAL_PASSWORD("401"),
-	INVALID_ARGUMENT("402");
+	INVALID_ARGUMENT("402"),
+	NO_SUCH_NOTIFICATION("501");
 
 	private String errorCode;
 

@@ -169,6 +169,29 @@ CREATE TABLE IF NOT EXISTS `mydb`.`tag` (
     PRIMARY KEY (`tag_id`))
     ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `mydb`.`notification`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`notification` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`notification` (
+                                                     `id` BIGINT NOT NULL AUTO_INCREMENT,
+                                                     `title` VARCHAR(50) NULL,
+                                                     `content` VARCHAR(255) NULL,
+                                                     `type` ENUM('PAPER', 'COMMENT') NOT NULL,
+                                                     `type_id` BIGINT NOT NULL,
+                                                     `status` ENUM('ALIVE', 'DELETED') NOT NULL DEFAULT 'ALIVE',
+                                                     `user_id` BIGINT NOT NULL,
+                                                     `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+                                                     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                                                     PRIMARY KEY (`id`),
+    INDEX `fk_notification_user1_idx` (`user_id` ASC) VISIBLE,
+    CONSTRAINT `fk_notification_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `mydb`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
