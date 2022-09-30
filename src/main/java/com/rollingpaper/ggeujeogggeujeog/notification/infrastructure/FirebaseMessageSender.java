@@ -4,14 +4,13 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.stereotype.Service;
-
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.rollingpaper.ggeujeogggeujeog.notification.domain.MessageSender;
 import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.dto.NotificationRequestDto;
 
 import lombok.RequiredArgsConstructor;
@@ -19,8 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
-public class FirebasePushService implements PushService {
+public class FirebaseMessageSender implements MessageSender {
 
 	private NotificationMapper notificationMapper;
 
@@ -40,7 +38,7 @@ public class FirebasePushService implements PushService {
 	}
 
 	@Override
-	public void sendMessage(NotificationRequestDto dto) {
+	public void sendNotification(NotificationRequestDto dto) {
 		Message firebaseMessage = MessageConverter.convertToFirebaseMessage(dto);
 		try {
 			FirebaseMessaging.getInstance().send(firebaseMessage);
