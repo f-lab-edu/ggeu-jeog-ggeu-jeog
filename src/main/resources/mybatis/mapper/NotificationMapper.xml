@@ -24,7 +24,7 @@
         WHERE id = #{id}
     </update>
 
-    <insert id="save" parameterType="com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification">
+    <insert id="saveEntity" parameterType="com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification">
         INSERT INTO notification (title, content, type, type_id, status, user_id)
         VALUES (#{message.title}, #{message.content}, #{message.content}, #{message.type}, #{status}, #{userId})
     </insert>

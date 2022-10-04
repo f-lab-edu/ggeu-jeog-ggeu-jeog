@@ -18,5 +18,5 @@ public interface NotificationMapper {
 
 	void update(Notification notification);
 
-	void save(Notification notification);
+	void saveEntity(Notification notification);
 }
