@@ -193,6 +193,23 @@ CREATE TABLE IF NOT EXISTS `mydb`.`notification` (
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `mydb`.`outbox`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`outbox` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`outbox` (
+                                               `id` BIGINT NOT NULL AUTO_INCREMENT,
+                                               `aggregate_type` VARCHAR(255) NOT NULL,
+                                               `aggregate_id` BIGINT NOT NULL,
+                                               `type` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
+                                               `payload` VARCHAR(255) NOT NULL,
+                                               `deleted` TINYINT NOT NULL default 0,
+                                               `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+                                               `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                                               PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
