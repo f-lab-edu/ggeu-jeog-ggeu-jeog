@@ -8,7 +8,7 @@
         WHERE user_id = #{userId}
     </select>
 
-    <select id="findById" resultType="com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification">
+    <select id="findNotificationById" resultType="com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification">
         SELECT *
         FROM notification
         WHERE id = #{notificationId}
@@ -24,7 +24,8 @@
         WHERE id = #{id}
     </update>
 
-    <insert id="saveEntity" parameterType="com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification">
+    <insert id="saveEntity" parameterType="com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification"
+            useGeneratedKeys="true" keyProperty="id">
         INSERT INTO notification (title, content, type, type_id, status, user_id)
         VALUES (#{message.title}, #{message.content}, #{message.content}, #{message.type}, #{status}, #{userId})
     </insert>
