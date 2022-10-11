@@ -34,7 +34,7 @@ public class NotificationFeedService {
 
 	@Transactional
 	public Notification findById(Long notificationId) {
-		return notificationMapper.findById(notificationId)
+		return notificationMapper.findNotificationById(notificationId)
 			.orElseThrow(NoSuchNotification::new);
 	}
 }
