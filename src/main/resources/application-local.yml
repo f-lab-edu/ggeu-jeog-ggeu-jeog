@@ -36,28 +36,35 @@ spring:
       org:
         quartz:
           scheduler:
+            threadName: hello
             instanceId: AUTO
           jobStore:
             class: org.quartz.impl.jdbcjobstore.JobStoreTX
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            useProperties: false
-            datasource: mydb
+            useProperties: true
+            dataSource: mydb
             tablePrefix: QRTZ_
             misfireThreshold: 60000
-            clusterCheckinInterval: 1000
+            clusterCheckinInterval: 5000
             isClustered: true
           threadPool:
             class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 10
+            threadCount: 5
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
           dataSource:
             mydb:
+              provider: hikaricp
               driver: com.mysql.cj.jdbc.Driver
               URL: jdbc:mysql://localhost:1234/mydb
               user: root
               password: ${LOCAL_DB_PASSWORD}
               maxConnections: 5
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never
 
 mybatis:
   mapper-locations: classpath:/mybatis/mapper/*.xml
