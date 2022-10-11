@@ -26,7 +26,7 @@ public class MessageService {
 		Notification entity = NotificationRequestDto.createNotificationEntity(notificationRequestDto);
 
 		notificationMapper.saveEntity(entity);
-		eventRepository.sendEvent(NotificationCreatedEvent.of(entity));
+		eventRepository.sendEvent(NotificationCreatedEvent.of(notificationRequestDto, entity.getId()));
 	}
 
 	private NotificationRequestDto createNotification(MessageRequestDto dto) {
