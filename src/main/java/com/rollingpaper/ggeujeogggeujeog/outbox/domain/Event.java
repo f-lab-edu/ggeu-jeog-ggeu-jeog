@@ -10,6 +10,7 @@ public class Event {
 	private Long aggregateId;
 	private EventType type;
 	private String payload;
+	private boolean deleted;
 
 	public Event() {}
 
@@ -19,5 +20,9 @@ public class Event {
 		this.aggregateId = aggregateId;
 		this.type = type;
 		this.payload = payload;
+	}
+
+	public void deleteEvent() {
+		this.deleted = true;
 	}
 }
