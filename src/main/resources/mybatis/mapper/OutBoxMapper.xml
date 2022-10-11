@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.NotificationMapper">
+<mapper namespace="com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure.OutBoxMapper">
 
     <insert id="saveEvent" parameterType="com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event">
         INSERT INTO outbox (aggregate_type, aggregate_id, type, payload)
@@ -14,10 +14,39 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateEvent" parameterType="com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event">
+        UPDATE outbox
+        SET id = #{id},
+            aggregate_type = #{aggregateType},
+            aggregate_id = #{aggregateId},
+            type = #{type},
+            payload = #{payload},
+            deleted = #{deleted}
+        WHERE id = #{id}
+    </update>
+
     <select id="findAllByAggregateType" resultType="com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event">
         SELECT *
         FROM outbox
         WHERE aggregate_type = #{type} AND deleted = 0
+    </select>
+
+    <select id="findEventById" resultType="com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event">
+        SELECT *
+        FROM outbox
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAllNotifications" resultType="com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event">
+        SELECT *
+        FROM outbox as o
+        JOIN (
+                SELECT id
+                FROM outbox
+                WHERE aggregate_type = 'notification' and deleted = 0
+                LIMIT #{_skiprows}, #{_pagesize}
+            ) as temp on temp.id = o.id
+        ORDER BY created_date ASC
     </select>
 
 </mapper>
