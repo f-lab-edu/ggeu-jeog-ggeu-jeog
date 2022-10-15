@@ -4,7 +4,6 @@
 -- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
@@ -59,18 +58,12 @@ DROP TABLE IF EXISTS `mydb`.`board` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`board` (
                                               `id` BIGINT NOT NULL AUTO_INCREMENT,
                                               `board_title` VARCHAR(50) NOT NULL,
-    `theme` ENUM('theme1', 'theme2', 'theme3') NULL,
+    `theme` ENUM('THEME1', 'THEME2', 'THEME3') NULL,
     `is_opened` TINYINT NULL,
     `created_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_time` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `fk_board_user_idx` (`user_id` ASC) VISIBLE,
-    CONSTRAINT `fk_board_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 
@@ -89,19 +82,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`paper` (
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `board_id` BIGINT NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `fk_paper_user1_idx` (`user_id` ASC) VISIBLE,
-    INDEX `fk_paper_board1_idx` (`board_id` ASC) VISIBLE,
-    CONSTRAINT `fk_paper_user1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `fk_paper_board1`
-    FOREIGN KEY (`board_id`)
-    REFERENCES `mydb`.`board` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 
@@ -117,19 +98,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `paper_id` BIGINT NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `fk_comment_user1_idx` (`user_id` ASC) VISIBLE,
-    INDEX `fk_comment_paper1_idx` (`paper_id` ASC) VISIBLE,
-    CONSTRAINT `fk_comment_user1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `fk_comment_paper1`
-    FOREIGN KEY (`paper_id`)
-    REFERENCES `mydb`.`paper` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 
@@ -154,18 +123,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`tag` (
                                             `tag_id` BIGINT NOT NULL AUTO_INCREMENT,
                                             `board_id` BIGINT NOT NULL,
                                             `tag_info_id` BIGINT NOT NULL,
-                                            INDEX `fk_tag_info_board1_idx` (`board_id` ASC) VISIBLE,
-    INDEX `fk_tag_tag_info1_idx` (`tag_info_id` ASC) VISIBLE,
-    CONSTRAINT `fk_tag_info_board1`
-    FOREIGN KEY (`board_id`)
-    REFERENCES `mydb`.`board` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `fk_tag_tag_info1`
-    FOREIGN KEY (`tag_info_id`)
-    REFERENCES `mydb`.`tag_info` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
     PRIMARY KEY (`tag_id`))
     ENGINE = InnoDB;
 
@@ -184,13 +141,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`notification` (
                                                      `user_id` BIGINT NOT NULL,
                                                      `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
                                                      `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-                                                     PRIMARY KEY (`id`),
-    INDEX `fk_notification_user1_idx` (`user_id` ASC) VISIBLE,
-    CONSTRAINT `fk_notification_user1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -207,9 +158,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`outbox` (
                                                `deleted` TINYINT NOT NULL default 0,
                                                `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
                                                `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-                                               PRIMARY KEY (`id`))
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
