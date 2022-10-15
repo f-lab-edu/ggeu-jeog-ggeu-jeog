@@ -25,4 +25,10 @@
             is_opened = #{Board.isOpened}
         WHERE id = #{BoardId.boardId}
     </update>
+
+    <select id="findById" resultType="com.rollingpaper.ggeujeogggeujeog.board.domain.Board">
+        SELECT *
+        FROM board
+        WHERE id = #{boardId}
+    </select>
 </mapper>
