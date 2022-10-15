@@ -18,7 +18,7 @@ import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.VerifyE
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @RestController
 public class AuthController {

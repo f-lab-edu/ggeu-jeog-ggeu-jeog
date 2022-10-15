@@ -28,7 +28,7 @@ import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @RestController
 public class PaperController {

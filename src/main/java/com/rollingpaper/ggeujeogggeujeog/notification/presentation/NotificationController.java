@@ -11,7 +11,7 @@ import com.rollingpaper.ggeujeogggeujeog.notification.presentation.dto.Notificat
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @RestController
 public class NotificationController {
