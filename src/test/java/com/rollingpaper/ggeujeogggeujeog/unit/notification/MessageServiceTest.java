@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.notification.application;
+package com.rollingpaper.ggeujeogggeujeog.unit.notification;
 
 import static org.mockito.BDDMockito.*;
 
@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.PaperTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
+import com.rollingpaper.ggeujeogggeujeog.notification.application.MessageService;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.dto.MessageRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.MessageSender;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationType;

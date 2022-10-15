@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.user.application;
+package com.rollingpaper.ggeujeogggeujeog.unit.user;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
 import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.UserUpdateRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;

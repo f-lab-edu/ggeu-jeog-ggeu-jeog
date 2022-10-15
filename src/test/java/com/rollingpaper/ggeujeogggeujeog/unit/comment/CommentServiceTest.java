@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.comment.application;
+package com.rollingpaper.ggeujeogggeujeog.unit.comment;
 
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.BoardTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.CommentTestFixture.*;
@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
+import com.rollingpaper.ggeujeogggeujeog.comment.application.CommentService;
 import com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment;
 import com.rollingpaper.ggeujeogggeujeog.comment.infrastructure.CommentMapper;
 import com.rollingpaper.ggeujeogggeujeog.comment.presentation.dto.CommentResponseDto;

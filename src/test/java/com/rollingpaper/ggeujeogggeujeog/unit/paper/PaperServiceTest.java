@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.paper.application;
+package com.rollingpaper.ggeujeogggeujeog.unit.paper;
 
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.BoardTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.PaperTestFixture.*;
@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.ImageTestFixture;
+import com.rollingpaper.ggeujeogggeujeog.paper.application.PaperServiceImpl;
 import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
 import com.rollingpaper.ggeujeogggeujeog.paper.exception.NoSuchPaperException;
 import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.ImageStorage;

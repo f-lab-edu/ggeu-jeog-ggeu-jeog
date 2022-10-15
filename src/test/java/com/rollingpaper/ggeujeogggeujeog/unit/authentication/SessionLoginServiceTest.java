@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.authentication.application;
+package com.rollingpaper.ggeujeogggeujeog.unit.authentication;
 
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.rollingpaper.ggeujeogggeujeog.authentication.application.EmailVerificationService;
+import com.rollingpaper.ggeujeogggeujeog.authentication.application.SessionLoginService;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignInRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.VerifyEmailRequestDto;

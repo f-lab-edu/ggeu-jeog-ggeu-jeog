@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.board.application;
+package com.rollingpaper.ggeujeogggeujeog.unit.board;
 
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.BoardTestFixture.*;
 import static com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture.*;
@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.rollingpaper.ggeujeogggeujeog.board.application.BoardServiceImpl;
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Theme;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.BoardOwnerException;
 import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
