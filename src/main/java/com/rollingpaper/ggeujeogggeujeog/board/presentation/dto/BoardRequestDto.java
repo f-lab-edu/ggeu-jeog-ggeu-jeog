@@ -11,12 +11,14 @@ import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BoardRequestDto {
     @NotBlank
     @Pattern(
-            regexp = "^[0-9\\s]|[a-zA-Z\\s]|[ㄱ-ㅎ가-힣\\s]|[ㄱ-ㅎ가-힣a-zA-Z\\s]{1,50}$",
+            regexp = "^[a-zA-Z\\d$@$!%*?&]{1,50}$",
             message = "숫자와 문자 중 하나의 조합으로 최소 1자 최대 50자로 입력해주세요."
     )
     private String boardTitle;
