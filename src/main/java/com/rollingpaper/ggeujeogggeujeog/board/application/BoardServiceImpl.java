@@ -53,7 +53,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void updateBoard(BoardRequestDto dto, Long boardId, User user) {
         checkBoardOwner(boardId, user);
-        boardMapper.update(BoardRequestDto.toEntity(dto, user), boardId);
+        boardMapper.update(BoardRequestDto.toEntity(dto, user));
     }
 
     @Transactional

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper">
@@ -20,10 +19,10 @@
     
     <update id="update">
         UPDATE board
-        SET board_title = #{Board.boardTitle},
-            theme = #{Board.theme},
-            is_opened = #{Board.isOpened}
-        WHERE id = #{BoardId.boardId}
+        SET board_title = #{boardTitle},
+            theme = #{theme},
+            is_opened = #{isOpened}
+        WHERE id = #{id}
     </update>
 
     <select id="findById" resultType="com.rollingpaper.ggeujeogggeujeog.board.domain.Board">

@@ -119,6 +119,6 @@ class BoardServiceImplTest {
         boardService.updateBoard(dto, TestBoard.BOARD1.getId(), TestUser.USER1);
 
         //then
-        then(boardMapper).should(times(1)).update(any(), anyLong());
+        then(boardMapper).should(times(1)).update(any());
     }
 }
