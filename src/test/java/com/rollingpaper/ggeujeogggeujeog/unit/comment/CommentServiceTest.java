@@ -88,6 +88,7 @@ class CommentServiceTest {
 	void deleteComment() {
 		//given
 		given(boardService.checkBoardOwner(anyLong(), any())).willReturn(TestBoard.BOARD1);
+		given(commentMapper.findByPaperId(anyLong())).willReturn(Optional.of(TestComment.COMMENT1));
 
 		//when
 		commentService.deleteComment(TestBoard.BOARD1.getId(), TestPaper.PAPER1.getId(), TestUser.USER1);
