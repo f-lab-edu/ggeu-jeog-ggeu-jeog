@@ -1,6 +1,7 @@
 package com.rollingpaper.ggeujeogggeujeog.notification.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.notification.application.dto.MessageRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
@@ -21,6 +22,7 @@ public class MessageService {
 	private final NotificationMapper notificationMapper;
 	private final EventRepository eventRepository;
 
+	@Transactional
 	public void sendMessage(MessageRequestDto dto) {
 		NotificationRequestDto notificationRequestDto = createNotification(dto);
 		Notification entity = NotificationRequestDto.createNotificationEntity(notificationRequestDto);
