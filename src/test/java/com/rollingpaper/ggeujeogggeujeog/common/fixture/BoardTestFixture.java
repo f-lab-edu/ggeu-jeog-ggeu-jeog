@@ -8,7 +8,7 @@ public class BoardTestFixture {
 	public static class TestBoard {
 		public static Board BOARD1 = Board.builder()
 			.id(1L)
-			.boardTitle("test-title-1")
+			.boardTitle("Title1")
 			.theme(Theme.THEME1)
 			.isOpened(false)
 			.userId(UserTestFixture.TestUser.USER1.getId())
@@ -16,7 +16,7 @@ public class BoardTestFixture {
 
 		public static Board BOARD2 = Board.builder()
 			.id(2L)
-			.boardTitle("test-title-2")
+			.boardTitle("Title2")
 			.theme(Theme.THEME1)
 			.isOpened(false)
 			.userId(UserTestFixture.TestUser.USER2.getId())
