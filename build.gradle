@@ -49,6 +49,7 @@ dependencies {
 	testImplementation "org.testcontainers:junit-jupiter:1.17.5"
 	testImplementation "org.testcontainers:mysql:1.17.5"
 	testImplementation "org.testcontainers:localstack:1.16.3"
+	testImplementation 'org.springframework.batch:spring-batch-test'
 }
 
 tasks.named('test') {
@@ -87,7 +88,6 @@ jacocoTestCoverageVerification {
 			limit {
 				minimum = 0.7
 				counter = 'CLASS'
-				value = 'CONVERTER'
 			}
 
 			excludes = [
