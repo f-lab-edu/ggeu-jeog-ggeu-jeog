@@ -19,4 +19,6 @@ public interface OutBoxMapper {
 	void deleteEvent(Event event);
 
 	Optional<Event> findEventById(Long id);
+
+	List<Event> findAllNotifications(Long _skiprows, Long _pagesize);
 }

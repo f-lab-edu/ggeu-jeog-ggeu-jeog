@@ -13,8 +13,9 @@ import com.rollingpaper.ggeujeogggeujeog.common.fixture.PaperTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.MessageService;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.dto.MessageRequestDto;
-import com.rollingpaper.ggeujeogggeujeog.notification.domain.MessageSender;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationType;
+import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.NotificationMapper;
+import com.rollingpaper.ggeujeogggeujeog.outbox.domain.EventRepository;
 
 @ExtendWith(MockitoExtension.class)
 class MessageServiceTest {
@@ -23,7 +24,10 @@ class MessageServiceTest {
 	private MessageService messageService;
 
 	@Mock
-	private MessageSender messageSender;
+	private NotificationMapper notificationMapper;
+
+	@Mock
+	private EventRepository eventRepository;
 
 	@Test
 	@DisplayName("메시지 전송에 성공한다.")
@@ -41,6 +45,7 @@ class MessageServiceTest {
 		messageService.sendMessage(dto);
 
 		//then
-		then(messageSender).should(times(1)).sendNotification(any());
+		then(notificationMapper).should(times(1)).saveEntity(any());
+		then(eventRepository).should(times(1)).sendEvent(any());
 	}
 }
