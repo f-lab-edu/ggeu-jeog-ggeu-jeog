@@ -46,7 +46,7 @@ public class NotificationBatchTask {
 	public Step startNotificationStep() {
 		log.debug("-------------------------------- create step --------------------------------");
 		return stepBuilderFactory.get("startNotificationStep")
-			.<Event, Event>chunk(10)
+			.<Event, Event>chunk(100)
 			.reader(EventReader())
 			.processor(EventProcessor())
 			.writer(EventWriter())
