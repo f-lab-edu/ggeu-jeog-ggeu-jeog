@@ -2,8 +2,10 @@ package com.rollingpaper.ggeujeogggeujeog.notification.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class NotificationMessage {
 
 	private static final String PAPER_TITLE = "새로운 페이퍼가 등록되었습니다.";
@@ -14,12 +16,8 @@ public class NotificationMessage {
 	private NotificationType type;
 	private Long typeId;
 
-	public NotificationMessage() {
-
-	}
-
 	@Builder
-	private NotificationMessage(String title, String content,
+	public NotificationMessage(String title, String content,
 		NotificationType type, Long typeId) {
 		this.title = title;
 		this.content = content;
@@ -49,5 +47,15 @@ public class NotificationMessage {
 			.type(NotificationType.COMMENT)
 			.typeId(commentId)
 			.build();
+	}
+
+	@Override
+	public String toString() {
+		return "NotificationMessage{" +
+			"title='" + title + '\'' +
+			", content='" + content + '\'' +
+			", type=" + type +
+			", typeId=" + typeId +
+			'}';
 	}
 }

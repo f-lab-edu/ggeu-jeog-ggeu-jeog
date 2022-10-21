@@ -7,8 +7,10 @@ import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class NotificationRequestDto {
 
 	private NotificationMessage message;
@@ -26,5 +28,13 @@ public class NotificationRequestDto {
 			.status(NotificationStatus.ALIVE)
 			.userId(dto.getUser().getId())
 			.build();
+	}
+
+	@Override
+	public String toString() {
+		return "NotificationRequestDto{" +
+			"message=" + message +
+			", user=" + user +
+			'}';
 	}
 }
