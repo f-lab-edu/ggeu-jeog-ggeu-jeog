@@ -133,12 +133,12 @@ DROP TABLE IF EXISTS `mydb`.`notification` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`notification` (
                                                      `id` BIGINT NOT NULL AUTO_INCREMENT,
+                                                     `status` ENUM('ALIVE', 'DELETED') NOT NULL DEFAULT 'ALIVE',
+                                                     `user_id` BIGINT NOT NULL,
                                                      `title` VARCHAR(50) NULL,
                                                      `content` VARCHAR(255) NULL,
                                                      `type` ENUM('PAPER', 'COMMENT') NOT NULL,
                                                      `type_id` BIGINT NOT NULL,
-                                                     `status` ENUM('ALIVE', 'DELETED') NOT NULL DEFAULT 'ALIVE',
-                                                     `user_id` BIGINT NOT NULL,
                                                      `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
                                                      `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`))
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`outbox` (
                                                `aggregate_type` VARCHAR(255) NOT NULL,
                                                `aggregate_id` BIGINT NOT NULL,
                                                `type` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-                                               `payload` VARCHAR(255) NOT NULL,
+                                               `payload` TEXT NOT NULL,
                                                `deleted` TINYINT NOT NULL default 0,
                                                `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
                                                `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
