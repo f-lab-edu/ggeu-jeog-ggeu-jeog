@@ -3,16 +3,27 @@ spring:
     multipart:
       max-file-size: 10MB
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${DATASOURCE_USER}
-    password: ${DATASOURCE_PASSWORD}
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${SPRING_DATASOURCE_MASTER_URL}
+      username: ${DATASOURCE_MASTER_USER}
+      password: ${DATASOURCE_MASTER_PASSWORD}
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${SPRING_DATASOURCE_SLAVE_URL}
+      username: ${DATASOURCE_SLAVE_USER}
+      password: ${DATASOURCE_SLAVE_PASSWORD}
   session:
     store-type: redis
   redis:
-    host: ${REDIS_HOST}
-    password: ${REDIS_PASSWORD}
-    port: ${REDIS_PORT}
+    master:
+      host: ${REDIS_MASTER_HOST}
+      port: ${REDIS_MASTER_PORT}
+    slaves:
+      - host: ${REDIS_SLAVE_1_HOST}
+        port: ${REDIS_SLAVE_1_PORT}
+      - host: ${REDIS_SLAVE_2_HOST}
+        port: ${REDIS_SLAVE_2_PORT}
   mail:
     host: smtp.gmail.com
     port: 587
@@ -55,9 +66,9 @@ spring:
             mydb:
               provider: hikaricp
               driver: com.mysql.cj.jdbc.Driver
-              URL: jdbc:mysql://localhost:1234/mydb
-              user: root
-              password: ${LOCAL_DB_PASSWORD}
+              URL: ${SPRING_DATASOURCE_MASTER_URL}
+              user: ${DATASOURCE_MASTER_USER}
+              password: ${DATASOURCE_MASTER_PASSWORD}
               maxConnections: 5
     batch:
       job:
