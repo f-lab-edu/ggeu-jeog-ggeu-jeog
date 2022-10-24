@@ -1,36 +1,34 @@
 package com.rollingpaper.ggeujeogggeujeog.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-import io.lettuce.core.ReadFrom;
-import lombok.RequiredArgsConstructor;
-
-@Configuration
-@RequiredArgsConstructor
+@TestConfiguration
 @EnableRedisHttpSession
-@Profile({"local", "prod"})
-public class RedisConfig {
+public class RedisContainerTestConfig {
 
-	private final RedisProperties properties;
+	@Value("${spring.redis.host}")
+	private String host;
+
+	@Value("${spring.redis.port}")
+	private int port;
+
+	@Value("${spring.redis.password}")
+	private String password;
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-			.readFrom(ReadFrom.REPLICA_PREFERRED)
-			.build();
-		RedisStandaloneConfiguration standaloneConfiguration = new RedisStandaloneConfiguration(properties.getMaster().getHost(),
-			properties.getMaster().getPort());
-		return new LettuceConnectionFactory(standaloneConfiguration, clientConfig);
+		RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(host, port);
+		configuration.setPassword(password);
+		return new LettuceConnectionFactory(configuration);
 	}
 
 	@Bean

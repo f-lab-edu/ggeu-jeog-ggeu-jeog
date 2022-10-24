@@ -13,7 +13,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 	classes = {
 		PasswordEncoderTestConfig.class,
 		MessageSenderTestConfig.class,
-		LocalStackS3TestConfig.class
+		LocalStackS3TestConfig.class,
+		RedisContainerTestConfig.class
 	}
 )
 @ActiveProfiles("test")
