@@ -28,8 +28,8 @@ public class RedisConfig {
 		LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
 			.readFrom(ReadFrom.REPLICA_PREFERRED)
 			.build();
-		RedisStandaloneConfiguration standaloneConfiguration = new RedisStandaloneConfiguration(properties.getMaster().getHost(),
-			properties.getMaster().getPort());
+		RedisStandaloneConfiguration standaloneConfiguration = new RedisStandaloneConfiguration(properties.getHost(),
+			properties.getPort());
 		return new LettuceConnectionFactory(standaloneConfiguration, clientConfig);
 	}
 

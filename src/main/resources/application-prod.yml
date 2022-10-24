@@ -16,14 +16,8 @@ spring:
   session:
     store-type: redis
   redis:
-    master:
-      host: ${REDIS_MASTER_HOST}
-      port: ${REDIS_MASTER_PORT}
-    slaves:
-      - host: ${REDIS_SLAVE_1_HOST}
-        port: ${REDIS_SLAVE_1_PORT}
-      - host: ${REDIS_SLAVE_2_HOST}
-        port: ${REDIS_SLAVE_2_PORT}
+    host: ${REDIS_MASTER_HOST}
+    port: ${REDIS_MASTER_PORT}
   mail:
     host: smtp.gmail.com
     port: 587
