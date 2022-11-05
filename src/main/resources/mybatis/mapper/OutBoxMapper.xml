@@ -44,9 +44,9 @@
                 SELECT id
                 FROM outbox
                 WHERE aggregate_type = 'notification' and deleted = 0
+                ORDER BY id
                 LIMIT #{_skiprows}, #{_pagesize}
             ) as temp on temp.id = o.id
-        ORDER BY created_date ASC
     </select>
 
 </mapper>
