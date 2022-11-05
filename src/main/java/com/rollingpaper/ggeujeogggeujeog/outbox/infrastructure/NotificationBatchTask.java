@@ -58,7 +58,7 @@ public class NotificationBatchTask {
 	public MyBatisPagingItemReader<Event> EventReader() {
 		log.debug("-------------------------------- ItemReader started --------------------------------");
 		return new MyBatisPagingItemReaderBuilder<Event>()
-			.pageSize(10)
+			.pageSize(100)
 			.sqlSessionFactory(sqlSessionFactory)
 			.queryId("com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure.OutBoxMapper.findAllNotifications")
 			.build();
