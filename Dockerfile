@@ -5,4 +5,4 @@ VOLUME /tmp
 COPY ${JAR_FILE} ggeu-jeog-ggeu-jeog.jar
 COPY ./scripts/deploy.sh /
 RUN ["chmod", "755", "deploy.sh"]
-ENTRYPOINT ["./deploy.sh"]
+ENTRYPOINT [".", "deploy.sh"]
