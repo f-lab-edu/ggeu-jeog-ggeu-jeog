@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
     `refresh_token` VARCHAR(255) NULL,
     `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`board` (
     `created_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_time` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -67,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`paper` (
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `board_id` BIGINT NOT NULL,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -83,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `paper_id` BIGINT NOT NULL,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -108,6 +112,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`board_tag` (
                                             `id` BIGINT NOT NULL AUTO_INCREMENT,
                                             `board_id` BIGINT NOT NULL,
                                             `tag_id` BIGINT NOT NULL,
+                                            `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -126,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`notification` (
                                                      `type_id` BIGINT NOT NULL,
                                                      `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
                                                      `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                                                     `is_read` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
