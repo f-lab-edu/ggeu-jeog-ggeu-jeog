@@ -8,7 +8,7 @@
     </insert>
 
     <select id="findByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.board.domain.Board">
-        SELECT board_title, theme, is_opened, updated_time
+        SELECT *
         FROM board
         WHERE user_id = #{userId}
     </select>
@@ -30,4 +30,57 @@
         FROM board
         WHERE id = #{boardId}
     </select>
+
+    <select id="findAllBoards" resultMap="BoardResultMap">
+        SELECT
+            b.id AS id,
+            b.board_title AS board_title,
+            b.theme AS theme,
+            b.created_time AS created_time,
+            b.updated_time AS updated_time,
+            b.is_opened AS is_opened,
+            b.user_id AS user_id,
+            t.id AS tag_id,
+            t.name AS tag_name
+        FROM board AS b
+            LEFT JOIN board_tag AS bt on bt.board_id = b.id
+            LEFT JOIN tag AS t on t.id = bt.tag_id
+        WHERE is_opened = ${isOpened}
+    </select>
+
+
+    <resultMap id="BoardResultMap" type="com.rollingpaper.ggeujeogggeujeog.board.domain.Board">
+        <id property="id" column="id"/>
+        <result property="boardTitle" column="board_title"/>
+        <result property="theme" column="theme"/>
+        <result property="createdDate" column="created_time"/>
+        <result property="updatedDate" column="updated_time"/>
+        <result property="isOpened" column="is_opened"/>
+        <result property="userId" column="user_id"/>
+        <collection property="tags" ofType="com.rollingpaper.ggeujeogggeujeog.board.domain.Tag">
+            <id property="id" column="tag_id"/>
+            <result property="name" column="tag_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAllTaggedBoards" resultMap="BoardResultMap">
+        SELECT
+            b.id AS id,
+            b.board_title AS board_title,
+            b.theme AS theme,
+            b.created_time AS created_time,
+            b.updated_time AS updated_time,
+            b.is_opened AS is_opened,
+            b.user_id AS user_id,
+            t.id AS tag_id,
+            t.name AS tag_name
+        FROM board AS b
+            LEFT JOIN board_tag AS bt on bt.board_id = b.id
+            LEFT JOIN tag AS t on t.id = bt.tag_id
+        WHERE b.is_opened = ${isOpened} AND t.name IN
+        <foreach collection="tagNames" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>

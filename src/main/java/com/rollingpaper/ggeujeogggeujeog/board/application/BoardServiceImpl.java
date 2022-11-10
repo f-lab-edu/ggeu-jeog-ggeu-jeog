@@ -11,6 +11,7 @@ import com.rollingpaper.ggeujeogggeujeog.board.exception.BoardOwnerException;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.NoSuchBoardException;
 import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.common.exception.BaseException;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
@@ -65,4 +66,17 @@ public class BoardServiceImpl implements BoardService {
         return board;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public BoardsResponseDto getBoards(boolean isOpened) {
+        List<Board> boards = boardMapper.findAllBoards(isOpened);
+        return new BoardsResponseDto(boards);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BoardsResponseDto getBoards(List<String> tagNames, boolean isOpened) {
+        List<Board> boards = boardMapper.findAllTaggedBoards(tagNames, isOpened);
+        return new BoardsResponseDto(boards);
+    }
 }
