@@ -35,21 +35,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `mydb`.`persistence_login`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`persistence_login` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`persistence_login` (
-                                                          `id` BIGINT NOT NULL AUTO_INCREMENT,
-                                                          `email` VARCHAR(255) NOT NULL,
-    `token` VARCHAR(45) NULL,
-    `last_used` DATETIME NULL,
-    PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
-
 -- -----------------------------------------------------
 -- Table `mydb`.`board`
 -- -----------------------------------------------------
@@ -103,11 +88,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`tag_info`
+-- Table `mydb`.`tag`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`tag_info` ;
+DROP TABLE IF EXISTS `mydb`.`tag` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`tag_info` (
+CREATE TABLE IF NOT EXISTS `mydb`.`tag` (
                                                  `id` BIGINT NOT NULL AUTO_INCREMENT,
                                                  `name` VARCHAR(10) NULL,
     PRIMARY KEY (`id`))
@@ -115,15 +100,15 @@ CREATE TABLE IF NOT EXISTS `mydb`.`tag_info` (
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`tag`
+-- Table `mydb`.`board_tag`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`tag` ;
+DROP TABLE IF EXISTS `mydb`.`board_tag` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`tag` (
-                                            `tag_id` BIGINT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `mydb`.`board_tag` (
+                                            `id` BIGINT NOT NULL AUTO_INCREMENT,
                                             `board_id` BIGINT NOT NULL,
-                                            `tag_info_id` BIGINT NOT NULL,
-    PRIMARY KEY (`tag_id`))
+                                            `tag_id` BIGINT NOT NULL,
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 -- -----------------------------------------------------
