@@ -13,4 +13,8 @@ public class Tag {
 		this.id = id;
 		this.name = name;
 	}
+
+	public static Tag createTagUsingName(String name) {
+		return new Tag(null, name);
+	}
 }
