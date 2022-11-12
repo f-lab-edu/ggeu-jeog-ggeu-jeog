@@ -20,10 +20,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardServiceImpl;
+import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Theme;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.BoardOwnerException;
 import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardSearchRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
 
@@ -131,7 +133,7 @@ class BoardServiceImplTest {
     @DisplayName("공개된 전체 보드를 검색한다.")
     void findALLOpenedBoards() {
         //given
-        given(boardMapper.findAllBoards(any()))
+        given(boardMapper.findAllBoards(anyBoolean()))
             .willReturn(Arrays.asList(TestBoard.BOARD3, TestBoard.BOARD4));
 
         //when
@@ -147,11 +149,14 @@ class BoardServiceImplTest {
         //given
         List<String> tagNames = Arrays.asList("test_tag_1", "test_tag_2");
         boolean isOpened = true;
-        given(boardMapper.findAllTaggedBoards(any(), any()))
-            .willReturn(Arrays.asList(TestBoard.BOARD1));
+        BoardSearchRequestDto requestDto = new BoardSearchRequestDto(
+            tagNames, isOpened
+        );
+        List<Board> boards = Arrays.asList(TestBoard.BOARD1);
+        given(boardMapper.findAllTaggedBoards(any(), anyBoolean())).willReturn(boards);
 
         //when
-        BoardsResponseDto dto = boardService.getBoards(tagNames, isOpened);
+        BoardsResponseDto dto = boardService.getBoards(requestDto);
 
         //then
         assertThat(dto.getBoardList().size()).isEqualTo(1);
@@ -163,9 +168,12 @@ class BoardServiceImplTest {
         //given
         List<String> emptyTags = Collections.emptyList();
         boolean isOpened = true;
+        BoardSearchRequestDto requestDto = new BoardSearchRequestDto(
+            emptyTags, isOpened
+        );
 
         //when
-        BoardsResponseDto dto = boardService.getBoards(emptyTags, isOpened);
+        BoardsResponseDto dto = boardService.getBoards(requestDto);
 
         //then
         assertThat(dto.getBoardList().size()).isZero();

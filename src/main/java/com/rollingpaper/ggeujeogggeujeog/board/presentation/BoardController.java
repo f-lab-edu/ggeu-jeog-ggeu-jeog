@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.CurrentUser;
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardSearchRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
@@ -81,7 +82,11 @@ public class BoardController {
         @RequestParam(required = false, value = "tagList") List<String> tagNames,
         @RequestParam(required = false, value = "opened", defaultValue = "true") boolean isOpened
     ) {
-        BoardsResponseDto dto = boardService.getBoards(tagNames, isOpened);
+        BoardSearchRequestDto requestDto = new BoardSearchRequestDto(
+            tagNames,
+            isOpened
+        );
+        BoardsResponseDto dto = boardService.getBoards(requestDto);
         return ResponseEntity.ok(dto);
     }
 }

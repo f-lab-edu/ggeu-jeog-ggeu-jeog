@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardSearchRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
@@ -22,5 +23,5 @@ public interface BoardService {
 
     BoardsResponseDto getBoards(boolean isOpened);
 
-    BoardsResponseDto getBoards(List<String> tagName, boolean isOpened);
+    BoardsResponseDto getBoards(BoardSearchRequestDto requestDto);
 }
