@@ -78,12 +78,6 @@ mybatis:
     map-underscore-to-camel-case: true
     default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
 
-logging:
-  level:
-    root: debug
-  file:
-    path:
-
 ncp:
   storage:
     end-point: https://kr.object.ncloudstorage.com

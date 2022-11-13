@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new SignInRequiredInterceptor())
 			.excludePathPatterns(
-				"/api/v1/users", "/api/v1/users/sign-in", "/api/v1/users/sign-out",
+				"/api/v1/users/sign-up", "/api/v1/users/sign-in", "/api/v1/users/sign-out",
 				"/api/v1/boards/open", "/api/v1/boards/search"
 			);
 	}
