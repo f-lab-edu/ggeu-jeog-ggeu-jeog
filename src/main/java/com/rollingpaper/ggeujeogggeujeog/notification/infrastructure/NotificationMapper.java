@@ -14,9 +14,9 @@ public interface NotificationMapper {
 
 	List<Notification> findAllByUserId(Long userId);
 
-	Optional<Notification> findById(Long notificationId);
+	Optional<Notification> findNotificationById(Long notificationId);
 
 	void update(Notification notification);
 
-	void save(Notification notification);
+	void saveEntity(Notification notification);
 }

@@ -37,6 +37,11 @@ public class NcpObjectStorage implements ImageStorage {
 		return fileName;
 	}
 
+	@Override
+	public boolean doesImageFileExist(String imageFileName) {
+		return NcpClient.doesObjectExist(bucket, imageFileName);
+	}
+
 	private ObjectMetadata createObjectMetadata(MultipartFile imageFile) {
 		ObjectMetadata objectMetadata = new ObjectMetadata();
 		objectMetadata.setContentLength(imageFile.getSize());

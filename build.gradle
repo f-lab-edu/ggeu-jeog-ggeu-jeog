@@ -7,7 +7,6 @@ plugins {
 }
 
 group = 'com.rollingpaper'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
@@ -34,7 +33,9 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.293'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.3'
-  implementation 'com.google.firebase:firebase-admin:9.0.0'
+	implementation group: 'org.quartz-scheduler', name: 'quartz'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
+	implementation 'com.google.firebase:firebase-admin:9.0.0'
 	implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -43,6 +44,12 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation "org.junit.jupiter:junit-jupiter:5.8.1"
+	testImplementation "org.testcontainers:testcontainers:1.17.5"
+	testImplementation "org.testcontainers:junit-jupiter:1.17.5"
+	testImplementation "org.testcontainers:mysql:1.17.5"
+	testImplementation "org.testcontainers:localstack:1.16.3"
+	testImplementation 'org.springframework.batch:spring-batch-test'
 }
 
 tasks.named('test') {
@@ -74,21 +81,32 @@ jacoco {
 jacocoTestCoverageVerification {
 	violationRules {
 		rule {
-			limit {
-				minimum = 0.2
-			}
-		}
 
-		rule {
 			enabled = false
 			element = 'CLASS'
-			includes = ['org.gradle.*']
 
 			limit {
-				counter = 'LINE'
-				value = 'TOTALCOUNT'
-				maximum = 0.3
+				minimum = 0.7
+				counter = 'CLASS'
 			}
+
+			excludes = [
+					'**.*Dto*',
+					'**.*Sender*',
+					'**.*Converter*',
+					'**.*Mapper*',
+					'**.*Config*',
+					'**.*Storage*',
+					'**.*Exception*',
+					'**.*Encoder*',
+					'**.*GgeuJeogGgeuJeogApplication*',
+					'**.*Const*',
+					'**.*Response*',
+					'**.*Request*',
+					'**.*Interceptor*',
+					'**.*ArgumentResolver*',
+					'**.*Builder*'
+			]
 		}
 	}
 }

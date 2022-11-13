@@ -1,0 +1,87 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  datasource:
+    hikari:
+      jdbc-url: jdbc:tc:mysql:8.0://localhost/mydb
+      driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+      username: root
+      password: test
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    password: test
+    port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+      org:
+        quartz:
+          scheduler:
+            threadName: hello
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            useProperties: true
+            dataSource: mydb
+            tablePrefix: QRTZ_
+            misfireThreshold: 60000
+            clusterCheckinInterval: 5000
+            isClustered: true
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 5
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+          dataSource:
+            mydb:
+              provider: hikaricp
+              driver: org.testcontainers.jdbc.ContainerDatabaseDriver
+              URL: jdbc:tc:mysql:8.0://localhost/mydb
+              user: root
+              password: test
+              maxConnections: 5
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:schema/schema.sql, classpath:schema/data.sql
+
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+
+ncp:
+  storage:
+    end-point: https://kr.object.ncloudstorage.com
+    region: kr-standard
+    access-key: ${NCP_ACCESSKEY}
+    secret-key: ${NCP_SECRETKEY}
+    bucket: rollingpaperimage

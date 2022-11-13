@@ -33,7 +33,9 @@ public class UserService {
 
 	@Transactional
 	public void delete(Long userId) {
-		userMapper.delete(userId);
+		User user = userMapper.findById(userId)
+			.orElseThrow(NoSuchUserException::new);
+		userMapper.delete(user.getId());
 		loginService.signOut();
 	}
 

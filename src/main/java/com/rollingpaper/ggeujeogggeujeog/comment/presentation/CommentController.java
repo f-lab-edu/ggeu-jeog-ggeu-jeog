@@ -23,7 +23,7 @@ import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RestController
 public class CommentController {
 

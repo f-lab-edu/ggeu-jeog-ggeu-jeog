@@ -1,0 +1,105 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE_NAME = 'namuhuchutong/rollingpaper'
+        DOCKER_IMAGE = ''
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'echo "Clonning Repository"'
+                git branch:
+                    url: 'https://github.com/f-lab-edu/ggeu-jeog-ggeu-jeog.git',
+                    credentialsId: 'github-credentials'
+            }
+            post {
+                success {
+                     sh 'echo "Successfully Cloned Repository"'
+                 }
+                 failure {
+                     sh 'echo "Fail Cloned Repository"'
+                 }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'echo "Test Start"'
+                dir('.') {
+                    sh 'pwd'
+                    sh """
+                    ./gradlew test
+                    """
+                }
+            }
+            post {
+                 failure {
+                     sh 'echo "Failed to test"'
+                }
+            }
+        }
+
+        stage('Build Project') {
+            steps {
+                sh 'echo "Build Start"'
+                dir('.') {
+                    sh 'pwd'
+                    sh """
+                    ./gradlew clean build --exclude-task test
+                    """
+                }
+            }
+            post {
+                failure {
+                    sh 'echo "Failed to build"'
+                }
+            }
+        }
+
+        stage('Bulid Docker Image') {
+            steps {
+                sh 'echo " Image Bulid Start"'
+                script {
+                    DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME
+                }
+
+            }
+            post {
+                failure {
+                    sh 'echo "Failed to build a docker image"'
+                }
+              }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh 'echo "Docker Image Push Start"'
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', "docker-hub-credentials") {
+                        DOCKER_IMAGE.push("latest")
+                    }
+
+                }
+            }
+            post {
+                success {
+                    sh 'echo "Success push docker image"'
+                    sh 'docker rmi registry.hub.docker.com/namuhuchutong/rollingpaper'
+                    sh 'docker rmi namuhuchutong/rollingpaper'
+                }
+                failure {
+                    error 'Fail to push a image'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'echo "Start Deploy"'
+            }
+        }
+
+    }
+}

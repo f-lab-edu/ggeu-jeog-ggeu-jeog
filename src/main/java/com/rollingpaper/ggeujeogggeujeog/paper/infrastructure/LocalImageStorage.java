@@ -45,6 +45,11 @@ public class LocalImageStorage implements ImageStorage {
 		}
 	}
 
+	@Override
+	public boolean doesImageFileExist(String imageFileName) {
+		return Files.exists(Paths.get(imageFileName));
+	}
+
 	private String getFullPath(String fileName) {
 		return uploadPath + fileName;
 	}

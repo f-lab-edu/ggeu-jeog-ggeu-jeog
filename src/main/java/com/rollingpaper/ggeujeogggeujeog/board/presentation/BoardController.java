@@ -14,17 +14,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.CurrentUser;
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardSearchRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @RestController
 public class BoardController {
@@ -64,5 +67,26 @@ public class BoardController {
     ) {
         boardService.updateBoard(dto, boardId, user);
         return ResponseEntity.status(OK).build();
+    }
+
+    @GetMapping("/boards/open")
+    public ResponseEntity<BoardsResponseDto> getOpenedBoards(
+        @RequestParam(required = false, value = "opened", defaultValue = "true") boolean isOpened
+    ) {
+        BoardsResponseDto dto = boardService.getBoards(isOpened);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/boards/search")
+    public ResponseEntity<BoardsResponseDto> searchOpenedBoards(
+        @RequestParam(required = false, value = "tagList") List<String> tagNames,
+        @RequestParam(required = false, value = "opened", defaultValue = "true") boolean isOpened
+    ) {
+        BoardSearchRequestDto requestDto = new BoardSearchRequestDto(
+            tagNames,
+            isOpened
+        );
+        BoardsResponseDto dto = boardService.getBoards(requestDto);
+        return ResponseEntity.ok(dto);
     }
 }
