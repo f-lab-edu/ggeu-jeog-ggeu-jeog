@@ -19,7 +19,7 @@ import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Profile({"prod", "local"})
+@Profile("prod")
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -29,7 +29,10 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new SignInRequiredInterceptor())
-			.excludePathPatterns("/api/v1/users", "/api/v1/users/sign-in", "/api/v1/users/sign-out");
+			.excludePathPatterns(
+				"/api/v1/users/sign-up", "/api/v1/users/sign-in", "/api/v1/users/sign-out",
+				"/api/v1/boards/open", "/api/v1/boards/search"
+			);
 	}
 
 	@Override
