@@ -19,7 +19,7 @@ import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.UserProfileRespon
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @RestController
 public class UserController {

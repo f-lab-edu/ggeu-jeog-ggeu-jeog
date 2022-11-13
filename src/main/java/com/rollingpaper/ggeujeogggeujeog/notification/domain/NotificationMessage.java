@@ -2,8 +2,10 @@ package com.rollingpaper.ggeujeogggeujeog.notification.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class NotificationMessage {
 
 	private String title;

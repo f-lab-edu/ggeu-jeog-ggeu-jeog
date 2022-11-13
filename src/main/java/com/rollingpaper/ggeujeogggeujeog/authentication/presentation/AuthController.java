@@ -18,7 +18,7 @@ import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.VerifyE
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
@@ -39,7 +39,7 @@ public class AuthController {
 		return ResponseEntity.status(OK).build();
 	}
 
-	@PostMapping
+	@PostMapping("/sign-up")
 	public ResponseEntity<Void> signUp(
 		@RequestBody @Valid SignUpRequestDto dto
 	) {

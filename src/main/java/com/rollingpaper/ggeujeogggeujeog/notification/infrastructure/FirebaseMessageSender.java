@@ -20,8 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FirebaseMessageSender implements MessageSender {
 
-	private NotificationMapper notificationMapper;
-
 	@PostConstruct
 	private void init() {
 		FirebaseOptions options = null;
@@ -42,7 +40,6 @@ public class FirebaseMessageSender implements MessageSender {
 		Message firebaseMessage = MessageConverter.convertToFirebaseMessage(dto);
 		try {
 			FirebaseMessaging.getInstance().send(firebaseMessage);
-			notificationMapper.save(NotificationRequestDto.createNotificationEntity(dto));
 		} catch (FirebaseMessagingException e) {
 			log.error("fail to send message", e);
 			throw new RuntimeException("메세지 전송에 실패했습니다.");

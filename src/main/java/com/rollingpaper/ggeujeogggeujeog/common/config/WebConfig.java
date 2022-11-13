@@ -29,7 +29,10 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new SignInRequiredInterceptor())
-			.excludePathPatterns("/api/users", "/api/users/sign-in", "/api/users/sign-out");
+			.excludePathPatterns(
+				"/api/v1/users/sign-up", "/api/v1/users/sign-in", "/api/v1/users/sign-out",
+				"/api/v1/boards/open", "/api/v1/boards/search"
+			);
 	}
 
 	@Override

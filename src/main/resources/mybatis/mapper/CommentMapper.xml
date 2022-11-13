@@ -9,14 +9,20 @@
 
     <select id="findComment" resultType="com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment">
         SELECT *
-        from comment
-        where paper_id = #{paperId}
+        FROM comment
+        WHERE paper_id = #{paperId}
     </select>
 
     <select id="findAllByUserId" resultType="com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment">
         SELECT *
-        from comment
-        where user_id = #{userId}
+        FROM comment
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="findByPaperId" resultType="com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment">
+        SELECT *
+        FROM comment
+        WHERE paper_id = #{paperId}
     </select>
 
     <delete id="delete">

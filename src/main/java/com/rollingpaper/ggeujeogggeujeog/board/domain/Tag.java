@@ -1,6 +1,5 @@
 package com.rollingpaper.ggeujeogggeujeog.board.domain;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,12 +7,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Tag {
 	private Long id;
-	private	Long tagInfoId;
-	private Long boardId;
+	private String name;
 
-	public Tag(Long id, Long tagInfoId, Long boardId) {
+	public Tag(Long id, String name) {
 		this.id = id;
-		this.tagInfoId = tagInfoId;
-		this.boardId = boardId;
+		this.name = name;
+	}
+
+	public static Tag createTagUsingName(String name) {
+		return new Tag(null, name);
 	}
 }
