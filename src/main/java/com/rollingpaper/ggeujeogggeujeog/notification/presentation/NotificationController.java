@@ -11,17 +11,19 @@ import com.rollingpaper.ggeujeogggeujeog.notification.presentation.dto.Notificat
 
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @RestController
 public class NotificationController {
 
-	private NotificationFeedService notificationFeedService;
+	private final NotificationFeedService notificationFeedService;
 
 	@GetMapping("/{userId}/notifications")
 	public ResponseEntity<NotificationsDto> getNotifications(
 		@PathVariable Long userId
 	) {
-		return ResponseEntity.ok(notificationFeedService.getUserNotifications(userId));
+		NotificationsDto userNotifications =
+			notificationFeedService.getUserNotifications(userId);
+		return ResponseEntity.ok(userNotifications);
 	}
 }
