@@ -1,3 +1,4 @@
+use mydb;
 -- -----------------------------------------------------
 -- Data `mydb`.`user`
 -- -----------------------------------------------------
@@ -14,6 +15,23 @@ INSERT INTO board(id, board_title, theme, is_opened, user_id) values (1, 'Title1
 INSERT INTO board(id, board_title, theme, is_opened, user_id) values (2, 'Title2', 'THEME2', 0, 1);
 INSERT INTO board(id, board_title, theme, is_opened, user_id) values (3, 'Title3', 'THEME1', 0, 5);
 INSERT INTO board(id, board_title, theme, is_opened, user_id) values (4, 'Title4', 'THEME2', 1, 1);
+INSERT INTO board(id, board_title, theme, is_opened, user_id) values (5, 'Title5', 'THEME2', 1, 2);
+INSERT INTO board(id, board_title, theme, is_opened, user_id) values (6, 'Title6', 'THEME1', 1, 3);
+-- -----------------------------------------------------
+-- Table `mydb`.`board_tag`
+-- -----------------------------------------------------
+INSERT INTO board_tag(id, board_id, tag_id) values(1, 1, 1);
+INSERT INTO board_tag(id, board_id, tag_id) values(2, 1, 2);
+INSERT INTO board_tag(id, board_id, tag_id) values(3, 2, 1);
+INSERT INTO board_tag(id, board_id, tag_id) values(4, 2, 2);
+INSERT INTO board_tag(id, board_id, tag_id) values(5, 2, 3);
+INSERT INTO board_tag(id, board_id, tag_id) values(6, 4, 1);
+-- -----------------------------------------------------
+-- Table `mydb`.`tag`
+-- -----------------------------------------------------
+INSERT INTO tag(id, name) values (1, 'test_tag_1');
+INSERT INTO tag(id, name) values (2, 'test_tag_2');
+INSERT INTO tag(id, name) values (3, 'test_tag_3');
 -- -----------------------------------------------------
 -- Data `mydb`.`paper`
 -- -----------------------------------------------------

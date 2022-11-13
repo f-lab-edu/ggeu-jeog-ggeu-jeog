@@ -34,7 +34,7 @@ class AuthIntegrationTest extends AbstractContainerBaseTest {
 
 	@Test
 	@Order(1)
-	@DisplayName("POST /api/v1/users - 회원가입에 성공한다.")
+	@DisplayName("POST /api/v1/users/sign-up - 회원가입에 성공한다.")
 	void successSignUp() throws Exception {
 		//given
 		SignUpRequestDto dto = new SignUpRequestDto(
@@ -44,7 +44,7 @@ class AuthIntegrationTest extends AbstractContainerBaseTest {
 		);
 
 		//when, then
-		this.mockMvc.perform(post("/api/v1/users")
+		this.mockMvc.perform(post("/api/v1/users/sign-up")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(dto)))
 			.andDo(print())

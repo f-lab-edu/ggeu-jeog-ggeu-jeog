@@ -32,23 +32,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
     `refresh_token` VARCHAR(255) NULL,
     `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`persistence_login`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`persistence_login` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`persistence_login` (
-                                                          `id` BIGINT NOT NULL AUTO_INCREMENT,
-                                                          `email` VARCHAR(255) NOT NULL,
-    `token` VARCHAR(45) NULL,
-    `last_used` DATETIME NULL,
-    PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `mydb`.`board`
@@ -63,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`board` (
     `created_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_time` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -82,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`paper` (
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `board_id` BIGINT NOT NULL,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -98,18 +86,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
     `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     `user_id` BIGINT NOT NULL,
     `paper_id` BIGINT NOT NULL,
-    PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`tag_info`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`tag_info` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`tag_info` (
-                                                 `id` BIGINT NOT NULL AUTO_INCREMENT,
-                                                 `name` VARCHAR(10) NULL,
+    `deleted` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -120,10 +97,23 @@ CREATE TABLE IF NOT EXISTS `mydb`.`tag_info` (
 DROP TABLE IF EXISTS `mydb`.`tag` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`tag` (
-                                            `tag_id` BIGINT NOT NULL AUTO_INCREMENT,
+                                                 `id` BIGINT NOT NULL AUTO_INCREMENT,
+                                                 `name` VARCHAR(10) NULL,
+    PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`board_tag`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`board_tag` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`board_tag` (
+                                            `id` BIGINT NOT NULL AUTO_INCREMENT,
                                             `board_id` BIGINT NOT NULL,
-                                            `tag_info_id` BIGINT NOT NULL,
-    PRIMARY KEY (`tag_id`))
+                                            `tag_id` BIGINT NOT NULL,
+                                            `deleted` TINYINT NOT NULL default 0,
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -141,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`notification` (
                                                      `type_id` BIGINT NOT NULL,
                                                      `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
                                                      `updated_date` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                                                     `is_read` TINYINT NOT NULL default 0,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 

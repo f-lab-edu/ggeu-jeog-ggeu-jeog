@@ -6,12 +6,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TagInfo {
-	private Long id;
-	private String name;
+public class BoardTag {
 
-	public TagInfo(Long id, String name) {
+	private Long id;
+	private Long boardId;
+	private Long tagId;
+
+	@Builder
+	public BoardTag(Long id, Long boardId, Long tagId) {
 		this.id = id;
-		this.name = name;
+		this.boardId = boardId;
+		this.tagId = tagId;
 	}
 }

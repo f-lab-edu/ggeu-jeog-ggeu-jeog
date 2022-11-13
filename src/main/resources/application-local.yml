@@ -4,16 +4,21 @@ spring:
       max-file-size: 10MB
       location:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:1234/mydb
-    username: root
-    password: ${LOCAL_DB_PASSWORD}
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/mydb
+      username: root
+      password: ${LOCAL_DB_PASSWORD}
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3307/mydb
+      username: root
+      password: ${LOCAL_DB_PASSWORD}
   session:
     store-type: redis
   redis:
     host: localhost
-    password: ${LOCAL_REDIS_PASSWORD}
-    port: 16379
+    port: 6379
   mail:
     host: smtp.gmail.com
     port: 587
@@ -56,7 +61,7 @@ spring:
             mydb:
               provider: hikaricp
               driver: com.mysql.cj.jdbc.Driver
-              URL: jdbc:mysql://localhost:1234/mydb
+              URL: jdbc:mysql://localhost:3306/mydb
               user: root
               password: ${LOCAL_DB_PASSWORD}
               maxConnections: 5

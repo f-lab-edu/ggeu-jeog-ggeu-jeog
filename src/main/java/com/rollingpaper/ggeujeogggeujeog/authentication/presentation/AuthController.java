@@ -39,7 +39,7 @@ public class AuthController {
 		return ResponseEntity.status(OK).build();
 	}
 
-	@PostMapping
+	@PostMapping("/sign-up")
 	public ResponseEntity<Void> signUp(
 		@RequestBody @Valid SignUpRequestDto dto
 	) {

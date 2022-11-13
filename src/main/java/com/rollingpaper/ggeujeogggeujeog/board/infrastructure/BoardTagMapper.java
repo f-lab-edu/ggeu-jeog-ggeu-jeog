@@ -5,5 +5,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper
-public interface TagInfoMapper {
+public interface BoardTagMapper {
+
+	void insertBoardTag(Long boardId, Long tagId);
+
+	void removeBoardTag(Long boardId, Long tagId);
 }
