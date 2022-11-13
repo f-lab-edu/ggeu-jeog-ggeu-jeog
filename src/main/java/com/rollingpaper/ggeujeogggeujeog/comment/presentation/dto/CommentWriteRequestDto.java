@@ -5,8 +5,10 @@ import javax.validation.constraints.NotBlank;
 import com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class CommentWriteRequestDto {
 
 	@NotBlank

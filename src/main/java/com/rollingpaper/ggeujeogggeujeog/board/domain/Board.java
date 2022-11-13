@@ -1,6 +1,7 @@
 package com.rollingpaper.ggeujeogggeujeog.board.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -16,10 +17,11 @@ public class Board {
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
 	private Long userId;
+	private List<Tag> tags;
 
 	@Builder
 	public Board(Long id, String boardTitle, Theme theme, boolean isOpened, LocalDateTime createdDate,
-		LocalDateTime updatedDate, Long userId) {
+		LocalDateTime updatedDate, Long userId, List<Tag> tags) {
 		this.id = id;
 		this.boardTitle = boardTitle;
 		this.theme = theme;
@@ -27,5 +29,10 @@ public class Board {
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
 		this.userId = userId;
+		this.tags = tags;
+	}
+
+	void addTag(Tag tag) {
+		this.tags.add(tag);
 	}
 }

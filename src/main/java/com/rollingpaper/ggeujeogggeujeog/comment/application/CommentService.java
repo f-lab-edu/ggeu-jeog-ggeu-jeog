@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
 import com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment;
+import com.rollingpaper.ggeujeogggeujeog.comment.exception.CommentAlreadyExistException;
 import com.rollingpaper.ggeujeogggeujeog.comment.exception.NoSuchCommentException;
 import com.rollingpaper.ggeujeogggeujeog.comment.infrastructure.CommentMapper;
 import com.rollingpaper.ggeujeogggeujeog.comment.presentation.dto.CommentResponseDto;
@@ -26,6 +27,9 @@ public class CommentService {
 	@Transactional
 	public void writeComment(CommentWriteRequestDto dto, Long boardId, Long paperId, User user) {
 		boardService.checkBoardOwner(boardId, user);
+		if(commentMapper.findByPaperId(paperId).isPresent()) {
+			throw new CommentAlreadyExistException();
+		}
 		commentMapper.save(dto.toEntity(dto, paperId, user.getId()));
 	}
 
@@ -49,6 +53,7 @@ public class CommentService {
 
 	@Transactional
 	public void deleteComment(Long boardId, Long paperId, User user) {
+		commentMapper.findByPaperId(paperId).orElseThrow(NoSuchCommentException::new);
 		boardService.checkBoardOwner(boardId, user);
 		commentMapper.delete(paperId);
 	}

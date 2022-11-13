@@ -46,7 +46,7 @@ public class NotificationBatchTask {
 	public Step startNotificationStep() {
 		log.debug("-------------------------------- create step --------------------------------");
 		return stepBuilderFactory.get("startNotificationStep")
-			.<Event, Event>chunk(10)
+			.<Event, Event>chunk(100)
 			.reader(EventReader())
 			.processor(EventProcessor())
 			.writer(EventWriter())
@@ -58,7 +58,7 @@ public class NotificationBatchTask {
 	public MyBatisPagingItemReader<Event> EventReader() {
 		log.debug("-------------------------------- ItemReader started --------------------------------");
 		return new MyBatisPagingItemReaderBuilder<Event>()
-			.pageSize(10)
+			.pageSize(100)
 			.sqlSessionFactory(sqlSessionFactory)
 			.queryId("com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure.OutBoxMapper.findAllNotifications")
 			.build();

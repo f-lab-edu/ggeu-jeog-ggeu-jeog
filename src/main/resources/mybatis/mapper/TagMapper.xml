@@ -1,0 +1,32 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rollingpaper.ggeujeogggeujeog.board.infrastructure.TagMapper">
+    <insert id="insertTag"
+            parameterType="com.rollingpaper.ggeujeogggeujeog.board.domain.Tag"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO tag(name) VALUES (#{name})
+    </insert>
+
+    <select id="findByBoardIdAndTagName" resultType="com.rollingpaper.ggeujeogggeujeog.board.domain.Tag">
+        SELECT temp.id, temp.name
+        FROM board_tag AS bt
+        JOIN (
+            SELECT id, name
+            FROM tag
+            WHERE name = #{tagName}
+            ) as temp on temp.id = bt.tag_id
+        WHERE bt.board_id = #{boardId} AND bt.deleted = 0;
+    </select>
+
+    <select id="findDuplicatedTags" resultType="com.rollingpaper.ggeujeogggeujeog.board.domain.Tag">
+        SELECT temp.id, temp.name
+        FROM board_tag AS bt
+        JOIN (
+            SELECT id, name
+            FROM tag
+            WHERE name = #{tagName}
+            ) as temp on temp.id = bt.tag_id
+        WHERE bt.board_id = #{boardId} AND bt.deleted = 0;
+    </select>
+</mapper>

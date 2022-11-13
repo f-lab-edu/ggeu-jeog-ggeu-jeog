@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class NotificationFeedService {
 
-	private NotificationMapper notificationMapper;
+	private final NotificationMapper notificationMapper;
 
 	@Transactional(readOnly = true)
 	public NotificationsDto getUserNotifications(Long userId) {

@@ -40,7 +40,7 @@
             updated_date = #{updatedDate},
             user_id = #{userId},
             board_id = #{boardId}
-        WHERE id = #{paperId}
+        WHERE id = #{id}
     </update>
 
     <delete id="delete">
