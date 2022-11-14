@@ -45,7 +45,7 @@
         FROM board AS b
             LEFT JOIN board_tag AS bt on bt.board_id = b.id
             LEFT JOIN tag AS t on t.id = bt.tag_id
-        WHERE is_opened = ${isOpened} AND bt.deleted = 0
+        WHERE is_opened = #{isOpened} AND bt.deleted = 0
     </select>
 
 
@@ -77,7 +77,7 @@
         FROM board AS b
             LEFT JOIN board_tag AS bt on bt.board_id = b.id
             LEFT JOIN tag AS t on t.id = bt.tag_id
-        WHERE b.is_opened={isOpened} AND bt.deleted=0 AND t.name IN
+        WHERE b.is_opened=#{isOpened} AND bt.deleted=0 AND t.name IN
         <foreach collection="tagNames" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
