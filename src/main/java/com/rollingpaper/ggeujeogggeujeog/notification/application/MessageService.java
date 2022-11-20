@@ -1,16 +1,17 @@
 package com.rollingpaper.ggeujeogggeujeog.notification.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rollingpaper.ggeujeogggeujeog.event.application.EventService;
+import com.rollingpaper.ggeujeogggeujeog.event.domain.NotificationInsertedEvent;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.dto.MessageRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationMessage;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationType;
 import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.NotificationMapper;
 import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.dto.NotificationRequestDto;
-import com.rollingpaper.ggeujeogggeujeog.outbox.domain.EventRepository;
-import com.rollingpaper.ggeujeogggeujeog.outbox.domain.NotificationCreatedEvent;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,15 @@ import lombok.RequiredArgsConstructor;
 public class MessageService {
 
 	private final NotificationMapper notificationMapper;
-	private final EventRepository eventRepository;
+	private final EventService eventService;
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void sendMessage(MessageRequestDto dto) {
 		NotificationRequestDto notificationRequestDto = createNotification(dto);
-		Notification entity = NotificationRequestDto.createNotificationEntity(notificationRequestDto);
+		Notification notification = NotificationRequestDto.createNotificationEntity(notificationRequestDto);
 
-		notificationMapper.saveEntity(entity);
-		eventRepository.sendEvent(NotificationCreatedEvent.of(notificationRequestDto, entity.getId()));
+		notificationMapper.saveEntity(notification);
+		eventService.sendEvent(NotificationInsertedEvent.of(notification, dto.getReceiver()));
 	}
 
 	private NotificationRequestDto createNotification(MessageRequestDto dto) {
