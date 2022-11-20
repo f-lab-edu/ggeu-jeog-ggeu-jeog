@@ -60,19 +60,18 @@ public class SessionLoginService implements LoginService {
 				throw new DuplicatedEmailException();
 			});
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-		userMapper.save(SignUpRequestDto.toEntity(dto));
+		User user = SignUpRequestDto.toEntity(dto);
+		userMapper.save(user);
 		String uuid = UUID.randomUUID().toString();
 		log.debug("{} {} has been created", dto.getEmail(), uuid);
-		emailVerificationService.sendRegistrationMail(dto.getEmail(), uuid);
+		emailVerificationService.sendRegistrationMail(user, uuid);
 	}
 
 	@Override
 	@Transactional
 	public void confirmRegistration(VerifyEmailRequestDto dto) {
-		emailVerificationService.verify(dto.getEmail(), dto.getToken());
 		User user = userMapper.findByEmail(dto.getEmail())
 			.orElseThrow(NoSuchUserException::new);
-		user.verifiedUser();
-		userMapper.update(user);
+		emailVerificationService.verify(user, dto.getToken());
 	}
 }
