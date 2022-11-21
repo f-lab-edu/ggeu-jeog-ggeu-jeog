@@ -9,8 +9,8 @@ import com.rollingpaper.ggeujeogggeujeog.event.domain.NotificationInsertedEvent;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.dto.MessageRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationMessage;
+import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationRepository;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationType;
-import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.NotificationMapper;
 import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.dto.NotificationRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MessageService {
 
-	private final NotificationMapper notificationMapper;
+	private final NotificationRepository notificationRepository;
 	private final EventService eventService;
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -28,7 +28,7 @@ public class MessageService {
 		NotificationRequestDto notificationRequestDto = createNotification(dto);
 		Notification notification = NotificationRequestDto.createNotificationEntity(notificationRequestDto);
 
-		notificationMapper.saveEntity(notification);
+		notificationRepository.saveEntity(notification);
 		eventService.sendEvent(NotificationInsertedEvent.of(notification, dto.getReceiver()));
 	}
 

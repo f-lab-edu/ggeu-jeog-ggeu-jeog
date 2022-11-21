@@ -15,8 +15,8 @@ import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.event.application.EventService;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.MessageService;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.dto.MessageRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationRepository;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationType;
-import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.NotificationMapper;
 
 @ExtendWith(MockitoExtension.class)
 class MessageServiceTest {
@@ -25,7 +25,7 @@ class MessageServiceTest {
 	private MessageService messageService;
 
 	@Mock
-	private NotificationMapper notificationMapper;
+	private NotificationRepository notificationRepository;
 
 	@Mock
 	private EventService eventService;
@@ -46,7 +46,7 @@ class MessageServiceTest {
 		messageService.sendMessage(dto);
 
 		//then
-		then(notificationMapper).should(times(1)).saveEntity(any());
+		then(notificationRepository).should(times(1)).saveEntity(any());
 		then(eventService).should(times(1)).sendEvent(any());
 	}
 }

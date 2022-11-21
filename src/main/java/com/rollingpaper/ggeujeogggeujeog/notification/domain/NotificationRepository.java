@@ -1,14 +1,9 @@
-package com.rollingpaper.ggeujeogggeujeog.notification.infrastructure;
+package com.rollingpaper.ggeujeogggeujeog.notification.domain;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.ibatis.annotations.Mapper;
-
-import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
-
-@Mapper
-public interface NotificationMapper {
+public interface NotificationRepository {
 
 	List<Notification> findAllByUserId(Long userId);
 
