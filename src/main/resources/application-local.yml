@@ -14,6 +14,9 @@ spring:
       jdbc-url: jdbc:mysql://localhost:3307/mydb
       username: root
       password: ${LOCAL_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      auto-commit: false
   session:
     store-type: redis
   redis:
