@@ -1,14 +1,9 @@
-package com.rollingpaper.ggeujeogggeujeog.paper.infrastructure;
+package com.rollingpaper.ggeujeogggeujeog.paper.domain;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.ibatis.annotations.Mapper;
-
-import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
-
-@Mapper
-public interface PaperMapper {
+public interface PaperRepository {
 
 	void save(Paper paper);
 
