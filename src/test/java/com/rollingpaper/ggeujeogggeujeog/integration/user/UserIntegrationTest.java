@@ -11,16 +11,12 @@ import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
-import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
 import com.rollingpaper.ggeujeogggeujeog.user.presentation.dto.UserUpdateRequestDto;
 
 class UserIntegrationTest extends AbstractContainerBaseTest {
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private UserMapper userMapper;
 
 	@Test
 	@DisplayName("존재하지 않는 유저는 프로필을 조회할 수 없다.")

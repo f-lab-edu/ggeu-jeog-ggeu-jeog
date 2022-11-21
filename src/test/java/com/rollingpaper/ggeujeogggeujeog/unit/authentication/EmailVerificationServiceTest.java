@@ -16,7 +16,7 @@ import com.rollingpaper.ggeujeogggeujeog.authentication.exception.NotSameTokenEx
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.event.application.EventService;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
-import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class EmailVerificationServiceTest {
@@ -31,7 +31,7 @@ class EmailVerificationServiceTest {
 	private EventService eventService;
 
 	@Mock
-	private UserMapper userMapper;
+	private UserRepository userRepository;
 
 	@Test
 	@DisplayName("저장소에 토큰이 없다면 예외가 발생한다.")
@@ -71,7 +71,7 @@ class EmailVerificationServiceTest {
 		emailVerificationService.verify(testUser, testToken);
 
 		//then
-		then(userMapper).should(times(1)).update(any());
+		then(userRepository).should(times(1)).update(any());
 	}
 
 	@Test
