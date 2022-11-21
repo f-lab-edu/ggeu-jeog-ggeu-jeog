@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rollingpaper.ggeujeogggeujeog.event.infrastructure.EventMapper">
+
+    <insert id="saveEvent" parameterType="com.rollingpaper.ggeujeogggeujeog.event.domain.Event">
+        INSERT INTO outbox (aggregate_type, aggregate_id, type, payload)
+        VALUES (#{aggregateType}, #{aggregateId}, #{type}, #{payload})
+    </insert>
+
+    <update id="deleteEvent" parameterType="com.rollingpaper.ggeujeogggeujeog.event.domain.Event">
+        UPDATE outbox
+        SET deleted = 1
+        WHERE id = #{id}
+    </update>
+
+    <select id="findAllByAggregateType" resultType="com.rollingpaper.ggeujeogggeujeog.event.domain.Event">
+        SELECT *
+        FROM outbox
+        WHERE aggregate_type = #{type} AND deleted = 0
+    </select>
+
+    <select id="findEventById" resultType="com.rollingpaper.ggeujeogggeujeog.event.domain.Event">
+        SELECT *
+        FROM outbox
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAllNotifications" resultType="com.rollingpaper.ggeujeogggeujeog.event.domain.Event">
+        SELECT *
+        FROM outbox as o
+        JOIN (
+                SELECT id
+                FROM outbox
+                WHERE aggregate_type = 'com.rollingpaper.ggeujeogggeujeog.notification.domain.notification'
+                  and deleted = 0
+                ORDER BY id
+                LIMIT #{_skiprows}, #{_pagesize}
+            ) as temp on temp.id = o.id
+    </select>
+
+    <select id="findAllMails" resultType="com.rollingpaper.ggeujeogggeujeog.event.domain.Event">
+        SELECT *
+        FROM outbox as o
+                 JOIN (
+            SELECT id
+            FROM outbox
+            WHERE aggregate_type = 'com.rollingpaper.ggeujeogggeujeog.user.domain.User'
+              and deleted = 0
+            ORDER BY id
+            LIMIT #{_skiprows}, #{_pagesize}
+        ) as temp on temp.id = o.id
+    </select>
+
+</mapper>

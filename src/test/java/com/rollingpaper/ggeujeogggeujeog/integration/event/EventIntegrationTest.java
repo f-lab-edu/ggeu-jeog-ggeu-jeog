@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.integration.outbox;
+package com.rollingpaper.ggeujeogggeujeog.integration.event;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,15 +21,23 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.testcontainers.shaded.org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.rollingpaper.ggeujeogggeujeog.common.config.AbstractContainerBaseTest;
-import com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event;
+import com.rollingpaper.ggeujeogggeujeog.common.config.BatchTestConfig;
+import com.rollingpaper.ggeujeogggeujeog.common.config.MessageSenderTestConfig;
+import com.rollingpaper.ggeujeogggeujeog.event.domain.Event;
+import com.rollingpaper.ggeujeogggeujeog.event.infrastructure.NotificationBatchTask;
 
 @SpringBatchTest
-public class OutboxIntegrationTest extends AbstractContainerBaseTest {
+@SpringBootTest(classes = {
+	NotificationBatchTask.class, MessageSenderTestConfig.class,
+	BatchTestConfig.class
+})
+public class EventIntegrationTest extends AbstractContainerBaseTest {
 
 	private static int DELETED_FLAG = 1;
 	private static String TRIGGER_NAME = "Notification-sending-per-1-minute";
@@ -65,6 +73,7 @@ public class OutboxIntegrationTest extends AbstractContainerBaseTest {
 
 		//when
 		JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+		JobExecution jobExecution1 = jobLauncherTestUtils.launchStep("startNotificationStep");
 
 		//then
 		assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);

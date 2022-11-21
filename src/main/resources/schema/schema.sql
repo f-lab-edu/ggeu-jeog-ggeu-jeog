@@ -143,8 +143,8 @@ DROP TABLE IF EXISTS `mydb`.`outbox` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`outbox` (
                                                `id` BIGINT NOT NULL AUTO_INCREMENT,
                                                `aggregate_type` VARCHAR(255) NOT NULL,
-                                               `aggregate_id` BIGINT NOT NULL,
-                                               `type` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
+                                               `aggregate_id` VARCHAR(255) NOT NULL,
+                                               `type` VARCHAR(255) NOT NULL,
                                                `payload` TEXT NOT NULL,
                                                `deleted` TINYINT NOT NULL default 0,
                                                `created_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,

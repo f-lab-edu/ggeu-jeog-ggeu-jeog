@@ -149,6 +149,7 @@ class SessionLoginServiceTest {
 		sessionLoginService.confirmRegistration(dto);
 
 		//then
-		then(userMapper).should(times(1)).update(TestUser.USER1);
+		then(emailVerificationService).should(times(1))
+			.verify(any(), anyString());
 	}
 }

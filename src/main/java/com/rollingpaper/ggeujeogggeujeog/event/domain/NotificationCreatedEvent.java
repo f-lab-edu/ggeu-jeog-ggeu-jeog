@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.outbox.domain;
+package com.rollingpaper.ggeujeogggeujeog.event.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,11 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NotificationCreatedEvent extends Event {
 
-	private static final ObjectMapper objectMapper = new ObjectMapper();
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 
 	private NotificationCreatedEvent(String aggregateType, Long aggregateId,
 		EventType type, String payload) {
-		super(aggregateType, aggregateId, type, payload);
+		// super(aggregateType, aggregateId, type, payload);
 	}
 
 	public static NotificationCreatedEvent of(NotificationRequestDto dto, Long notificationId) {
@@ -21,7 +21,7 @@ public class NotificationCreatedEvent extends Event {
 		String payload;
 
 		try {
-			payload = objectMapper.writeValueAsString(dto);
+			payload = MAPPER.writeValueAsString(dto);
 		} catch (JsonProcessingException e) {
 			log.error("failed to process json", e);
 			payload = "";
@@ -37,7 +37,7 @@ public class NotificationCreatedEvent extends Event {
 
 	public static NotificationRequestDto convertEventToDto(Event event) {
 		try {
-			return objectMapper.readValue(event.getPayload(), NotificationRequestDto.class);
+			return MAPPER.readValue(event.getPayload(), NotificationRequestDto.class);
 		} catch (JsonProcessingException e) {
 			log.error("failed to convert json to object");
 			throw new RuntimeException("객체 변환에 실패했습니다.");
