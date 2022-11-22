@@ -8,7 +8,7 @@ import com.rollingpaper.ggeujeogggeujeog.authentication.exception.NotSameTokenEx
 import com.rollingpaper.ggeujeogggeujeog.event.application.EventService;
 import com.rollingpaper.ggeujeogggeujeog.event.domain.UserCreatedEvent;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
-import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class EmailVerificationService {
 
 	private final TokenRepository tokenRepository;
 	private final EventService eventService;
-	private final UserMapper userMapper;
+	private final UserRepository userRepository;
 
 	@Transactional
 	public void sendRegistrationMail(User user, String token) {
@@ -35,6 +35,6 @@ public class EmailVerificationService {
 			throw new NotSameTokenException();
 		}
 		user.verifiedUser();
-		userMapper.update(user);
+		userRepository.update(user);
 	}
 }

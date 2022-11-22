@@ -1,14 +1,9 @@
-package com.rollingpaper.ggeujeogggeujeog.comment.infrastructure;
+package com.rollingpaper.ggeujeogggeujeog.comment.domain;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.ibatis.annotations.Mapper;
-
-import com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment;
-
-@Mapper
-public interface CommentMapper {
+public interface CommentRepository {
 
 	void save(Comment comment);
 

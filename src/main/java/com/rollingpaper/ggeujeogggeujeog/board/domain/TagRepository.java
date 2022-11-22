@@ -1,14 +1,9 @@
-package com.rollingpaper.ggeujeogggeujeog.board.infrastructure;
+package com.rollingpaper.ggeujeogggeujeog.board.domain;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.ibatis.annotations.Mapper;
-
-import com.rollingpaper.ggeujeogggeujeog.board.domain.Tag;
-
-@Mapper
-public interface TagMapper {
+public interface TagRepository {
 
 	Optional<Tag> findByBoardIdAndTagName(Long boardId, String tagName);
 
