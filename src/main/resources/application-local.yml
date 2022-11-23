@@ -14,14 +14,17 @@ spring:
       jdbc-url: jdbc:mysql://localhost:3307/mydb
       username: root
       password: ${LOCAL_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      auto-commit: false
   session:
     store-type: redis
   redis:
     host: localhost
     port: 6379
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: localhost
+    port: 1025
     username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
     properties:

@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rollingpaper.ggeujeogggeujeog.authentication.infrastructure.TokenRepository;
+import com.rollingpaper.ggeujeogggeujeog.authentication.domain.TokenRepository;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignInRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.VerifyEmailRequestDto;
