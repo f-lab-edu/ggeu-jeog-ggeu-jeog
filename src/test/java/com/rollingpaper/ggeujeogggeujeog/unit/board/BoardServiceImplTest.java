@@ -28,6 +28,7 @@ import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardSearchRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
 class BoardServiceImplTest {
@@ -177,5 +178,20 @@ class BoardServiceImplTest {
 
         //then
         assertThat(dto.getBoardList().size()).isZero();
+    }
+
+    @Test
+    @DisplayName("관리자는 모든 보드를  소유한다.")
+    void UpdateAndDeleteWithAdminRole() {
+        //given
+        User admin = TestUser.USER1;
+        Long boardId = TestBoard.BOARD1.getId();
+        given(boardRepository.findById(any())).willReturn(Optional.ofNullable(TestBoard.BOARD1));
+
+        //when
+        Board board = boardService.checkBoardOwner(boardId, admin);
+
+        //then
+        assertThat(board).isEqualTo(TestBoard.BOARD1);
     }
 }

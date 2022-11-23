@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.event.application.EventService;
-import com.rollingpaper.ggeujeogggeujeog.event.domain.NotificationInsertedEvent;
+import com.rollingpaper.ggeujeogggeujeog.event.domain.NotificationCreatedEvent;
 import com.rollingpaper.ggeujeogggeujeog.notification.application.dto.MessageRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationMessage;
@@ -29,7 +29,7 @@ public class MessageService {
 		Notification notification = NotificationRequestDto.createNotificationEntity(notificationRequestDto);
 
 		notificationRepository.saveEntity(notification);
-		eventService.sendEvent(NotificationInsertedEvent.of(notification, dto.getReceiver()));
+		eventService.sendEvent(NotificationCreatedEvent.of(notification, dto.getReceiver()));
 	}
 
 	private NotificationRequestDto createNotification(MessageRequestDto dto) {

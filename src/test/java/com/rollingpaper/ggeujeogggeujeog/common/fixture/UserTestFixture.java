@@ -11,7 +11,7 @@ public class UserTestFixture {
 			.email("tester1@tester.com")
 			.password("1Q2w3e4r!@")
 			.nickname("tester1")
-			.role(Role.DEFAULT)
+			.role(Role.ADMIN)
 			.verified(true)
 			.build();
 

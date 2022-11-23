@@ -14,8 +14,8 @@ import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardSearchRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.UserBoardResponseDto;
-import com.rollingpaper.ggeujeogggeujeog.common.exception.BaseException;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.Role;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
 
@@ -59,12 +59,21 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Transactional
-    public Board checkBoardOwner(Long boardId, User user) throws BaseException {
+    public Board checkBoardOwner(Long boardId, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(NoSuchBoardException::new);
+        if (isAdmin(user)) {
+            return board;
+        }
+
         if (!board.getUserId().equals(user.getId())) {
             throw new BoardOwnerException();
         }
+
         return board;
+    }
+
+    private boolean isAdmin(User user) {
+        return user.getRole().equals(Role.ADMIN);
     }
 
     @Override
