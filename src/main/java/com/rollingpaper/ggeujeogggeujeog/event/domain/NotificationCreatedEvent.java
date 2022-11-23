@@ -1,46 +1,65 @@
 package com.rollingpaper.ggeujeogggeujeog.event.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
+import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationMessage;
 import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.dto.NotificationRequestDto;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class NotificationCreatedEvent extends Event {
+public class NotificationCreatedEvent implements Outboxable {
 
-	private static final ObjectMapper MAPPER = new ObjectMapper();
+	private static ObjectMapper MAPPER = new ObjectMapper();
 
-	private NotificationCreatedEvent(String aggregateType, Long aggregateId,
-		EventType type, String payload) {
-		// super(aggregateType, aggregateId, type, payload);
+	private final Long notificationId;
+	private final JsonNode payload;
+
+	public NotificationCreatedEvent(Long notificationId, JsonNode payload) {
+		this.notificationId = notificationId;
+		this.payload = payload;
 	}
 
-	public static NotificationCreatedEvent of(NotificationRequestDto dto, Long notificationId) {
+	public static NotificationCreatedEvent of(Notification notification, User user) {
 
-		String payload;
+		NotificationMessage message = notification.getMessage();
 
-		try {
-			payload = MAPPER.writeValueAsString(dto);
-		} catch (JsonProcessingException e) {
-			log.error("failed to process json", e);
-			payload = "";
-		}
+		JsonNode event = MAPPER.createObjectNode()
+			.putPOJO("message", message)
+			.putPOJO("user", user);
+
 
 		return new NotificationCreatedEvent(
-				"notification",
-				notificationId,
-				EventType.INSERT,
-				payload
-			);
+			notification.getId(),
+			event
+		);
 	}
 
-	public static NotificationRequestDto convertEventToDto(Event event) {
+	@Override
+	public String getAggregateId() {
+		return String.valueOf(notificationId);
+	}
+
+	@Override
+	public String getAggregateType() {
+		return NotificationRequestDto.class.getName();
+	}
+
+	@Override
+	public String getPayload() {
 		try {
-			return MAPPER.readValue(event.getPayload(), NotificationRequestDto.class);
+			return MAPPER.writeValueAsString(payload);
 		} catch (JsonProcessingException e) {
 			log.error("failed to convert json to object");
 			throw new RuntimeException("객체 변환에 실패했습니다.");
 		}
+	}
+
+	@Override
+	public String getType() {
+		return this.getClass().getName();
 	}
 }
