@@ -36,7 +36,6 @@ dependencies {
 	implementation group: 'org.quartz-scheduler', name: 'quartz'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
 	implementation 'com.google.firebase:firebase-admin:9.0.0'
-	implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
