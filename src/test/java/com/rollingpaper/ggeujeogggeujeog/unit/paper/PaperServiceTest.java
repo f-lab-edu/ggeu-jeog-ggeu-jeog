@@ -23,7 +23,7 @@ import com.rollingpaper.ggeujeogggeujeog.paper.application.PaperServiceImpl;
 import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
 import com.rollingpaper.ggeujeogggeujeog.paper.domain.PaperRepository;
 import com.rollingpaper.ggeujeogggeujeog.paper.exception.NoSuchPaperException;
-import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.ImageStorage;
+import com.rollingpaper.ggeujeogggeujeog.paper.domain.ImageStorage;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperUpdateRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperWriteRequest;
