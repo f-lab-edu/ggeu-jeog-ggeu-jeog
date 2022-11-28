@@ -1,10 +1,9 @@
-package com.rollingpaper.ggeujeogggeujeog.event.domain;
+package com.rollingpaper.ggeujeogggeujeog.notification.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
-import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationMessage;
+import com.rollingpaper.ggeujeogggeujeog.event.domain.Outboxable;
 import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.dto.NotificationRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 

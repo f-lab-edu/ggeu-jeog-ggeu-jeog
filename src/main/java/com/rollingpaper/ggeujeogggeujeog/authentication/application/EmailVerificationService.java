@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rollingpaper.ggeujeogggeujeog.authentication.domain.TokenRepository;
 import com.rollingpaper.ggeujeogggeujeog.authentication.exception.NotSameTokenException;
 import com.rollingpaper.ggeujeogggeujeog.event.application.EventService;
-import com.rollingpaper.ggeujeogggeujeog.event.domain.UserCreatedEvent;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.UserCreatedEvent;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.UserRepository;
 
@@ -25,7 +25,7 @@ public class EmailVerificationService {
 	@Transactional
 	public void sendRegistrationMail(User user, String token) {
 		tokenRepository.storeToken(user.getEmail(), token);
-		eventService.sendEvent(UserCreatedEvent.of(user, token));
+		eventService.publish(UserCreatedEvent.of(user, token));
 	}
 
 	@Transactional

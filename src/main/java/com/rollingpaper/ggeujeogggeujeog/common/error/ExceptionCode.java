@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.common.exception;
+package com.rollingpaper.ggeujeogggeujeog.common.error;
 
 public enum ExceptionCode {
 

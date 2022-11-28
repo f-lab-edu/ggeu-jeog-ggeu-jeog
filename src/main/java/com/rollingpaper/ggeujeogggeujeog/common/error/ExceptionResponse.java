@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.common.exception;
+package com.rollingpaper.ggeujeogggeujeog.common.error;
 
 import lombok.Getter;
 

@@ -1,10 +1,10 @@
-package com.rollingpaper.ggeujeogggeujeog.event.domain;
+package com.rollingpaper.ggeujeogggeujeog.user.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rollingpaper.ggeujeogggeujeog.common.constant.MailSubjectConst;
-import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+import com.rollingpaper.ggeujeogggeujeog.event.domain.Outboxable;
 
 import lombok.extern.slf4j.Slf4j;
 
