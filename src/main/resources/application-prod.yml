@@ -14,7 +14,7 @@ spring:
       username: ${DATASOURCE_SLAVE_USER}
       password: ${DATASOURCE_SLAVE_PASSWORD}
     hikari:
-      maximum-pool-size: 20
+      maximum-pool-size: 10
       auto-commit: false
   session:
     store-type: redis
