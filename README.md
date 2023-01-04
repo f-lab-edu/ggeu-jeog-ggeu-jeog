@@ -24,6 +24,7 @@
 
 - Java 11
 - Spring boot 2.7
+- Spring Batch
 - Mybatis
 - Redis
 - Docker
