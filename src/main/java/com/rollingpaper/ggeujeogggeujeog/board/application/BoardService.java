@@ -21,7 +21,7 @@ public interface BoardService {
 
     Board checkBoardOwner(Long boardId, User user);
 
-    BoardsResponseDto getBoards(boolean isOpened);
+    BoardsResponseDto getBoards(boolean isOpened, int pageSize);
 
     BoardsResponseDto getBoards(BoardSearchRequestDto requestDto);
 }

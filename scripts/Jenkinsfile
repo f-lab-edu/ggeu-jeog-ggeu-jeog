@@ -1,17 +1,12 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE_NAME = 'namuhuchutong/rollingpaper'
-        DOCKER_IMAGE = ''
-    }
-
     stages {
         stage('Prepare') {
             steps {
                 sh 'echo "Clonning Repository"'
-                git branch:
-                    url: 'https://github.com/f-lab-edu/ggeu-jeog-ggeu-jeog.git',
+                git branch: 'develop',
+                    url: 'https://github.com/namuhuchutong/ggeu-jeog-ggeu-jeog',
                     credentialsId: 'github-credentials'
             }
             post {
@@ -28,20 +23,19 @@ pipeline {
             steps {
                 sh 'echo "Test Start"'
                 dir('.') {
-                    sh 'pwd'
-                    sh """
+                    sh '''
                     ./gradlew test
-                    """
+                    '''
                 }
             }
             post {
                  failure {
-                     sh 'echo "Failed to test"'
+                     sh 'echo "Test Failed"'
                 }
             }
         }
 
-        stage('Build Project') {
+         stage('Build Project') {
             steps {
                 sh 'echo "Build Start"'
                 dir('.') {
@@ -58,48 +52,136 @@ pipeline {
             }
         }
 
-        stage('Bulid Docker Image') {
-            steps {
-                sh 'echo " Image Bulid Start"'
-                script {
-                    DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME
-                }
-
-            }
-            post {
-                failure {
-                    sh 'echo "Failed to build a docker image"'
-                }
-              }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                sh 'echo "Docker Image Push Start"'
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', "docker-hub-credentials") {
-                        DOCKER_IMAGE.push("latest")
-                    }
-
-                }
-            }
-            post {
-                success {
-                    sh 'echo "Success push docker image"'
-                    sh 'docker rmi registry.hub.docker.com/namuhuchutong/rollingpaper'
-                    sh 'docker rmi namuhuchutong/rollingpaper'
-                }
-                failure {
-                    error 'Fail to push a image'
-                }
-            }
-        }
-
         stage('Deploy') {
+
+            environment {
+                DEPLOY_GROUP= sh (returnStdout: true, script: '''#!/bin/bash
+                    group_a_array=($group_a)
+
+                    target_group=''
+
+                    alive_was_count=0
+
+                    for i in "${group_a_array[@]}"
+                      do
+                        if curl -I -X OPTION "${i}:8080/api/v1/users/sign-up"; then
+                          alive_was_count=$((alive_was_count+1))
+                        fi
+                      done
+                    if [ ${alive_was_count} -eq 0 ];then
+                        echo 'group_a'
+                    elif [ ${alive_was_count} -eq ${#group_a_array[@]} ];then
+                        echo 'group_b'
+                    else
+                        echo 'currently running was counts are not correct'
+                        exit 100
+                    fi''').trim()
+                }
+
+
             steps {
                 sh 'echo "Start Deploy"'
+
+                script {
+                    def deploy_server_ips;
+                    def close_server_ips;
+                    def envVar = env.getEnvironment();
+
+                    if (DEPLOY_GROUP == "group_a") {
+                        deploy_server_ips = envVar.group_b.split(' ');
+                        close_server_ips = envVar.group_a.split(' ');
+                    } else {
+                        deploy_server_ips = envVar.group_a.split(' ');
+                        close_server_ips = envVar.group_b.split(' ');
+                    }
+
+                    def map = parseSSHServerConfiguration();
+
+                    for (item in deploy_server_ips) {
+                        println "deploy_servers"
+                        println "${item}"
+                        println "${map.get(item)}"
+                        sshPublisher(
+                            continueOnError: false, failOnError: true,
+                            publishers: [
+                                sshPublisherDesc(
+                                    configName: map.get(item),
+                                    transfers: [
+                                        sshTransfer(
+                                            cleanRemote: false,
+                                            execTimeout: 120000,
+                                            flatten: false,
+                                            makeEmptyDirs: false,
+                                            noDefaultExcludes: false,
+                                            patternSeparator: '[, ]+',
+                                            remoteDirectorySDF: false,
+                                            removePrefix: 'build/libs/',
+                                            sourceFiles: 'build/libs/ggeu-jeog-ggeu-jeog.jar',
+                                            execCommand: '''
+                                            ./deploy.sh
+                                            '''
+                                            )],
+                                        usePromotionTimestamp: false,
+                                        useWorkspaceInPromotion: false,
+                                    )
+                                ]
+                            )
+                    }
+                    for (item in close_server_ips) {
+                                            println "deploy_servers"
+                                            println "${item}"
+                                            println "${map.get(item)}"
+                                            sshPublisher(
+                                                continueOnError: false, failOnError: true,
+                                                publishers: [
+                                                    sshPublisherDesc(
+                                                        configName: map.get(item),
+                                                        transfers: [
+                                                            sshTransfer(
+                                                                cleanRemote: false,
+                                                                execTimeout: 120000,
+                                                                flatten: false,
+                                                                makeEmptyDirs: false,
+                                                                noDefaultExcludes: false,
+                                                                patternSeparator: '[, ]+',
+                                                                remoteDirectorySDF: false,
+                                                                execCommand: '''
+                                                                    ./stop.sh
+                                                                    '''
+                                                                )],
+                                                            usePromotionTimestamp: false,
+                                                            useWorkspaceInPromotion: false,
+                                                        )
+                                                    ]
+                                                )
+                                        }
+                }
+            }
+
+
+            post {
+                success {
+                    sh 'echo "Success to deploy"'
+                }
+                failure {
+                    error 'Fail to deploy'
+                }
             }
         }
 
     }
+}
+
+@NonCPS
+def parseSSHServerConfiguration() {
+    def xml = new XmlSlurper().parse("${JENKINS_HOME}/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml");
+    def server_nick_names = xml.'**'.findAll{it.name() == 'name'};
+    def server_ip_address = xml.'**'.findAll{it.name() == 'hostname'};
+    def map = new HashMap();
+    for (i = 0; i < server_nick_names.size(); i++) {
+        def server_ip_str = (String) server_ip_address.get(i);
+        def server_nick_name_str = (String) server_nick_names.get(i);
+        map.put(server_ip_str, server_nick_name_str);
+    }
+    return map;
 }

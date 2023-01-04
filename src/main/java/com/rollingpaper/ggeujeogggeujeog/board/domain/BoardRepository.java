@@ -15,7 +15,7 @@ public interface BoardRepository {
 
 	Optional<Board> findById(Long boardId);
 
-	List<Board> findAllBoards(boolean isOpened);
+	List<Board> findAllBoards(boolean isOpened, int pageSize);
 
 	List<Board> findAllTaggedBoards(List<String> tagNames, boolean isOpened);
 

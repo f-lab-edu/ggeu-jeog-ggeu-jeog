@@ -16,7 +16,7 @@ public class EventService {
 	private final EventRepository eventRepository;
 
 	@Transactional
-	public void sendEvent(Outboxable outboxable) {
+	public void publish(Outboxable outboxable) {
 		eventRepository.sendEvent(Event.from(outboxable));
 	}
 }

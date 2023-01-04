@@ -86,6 +86,6 @@ class EmailVerificationServiceTest {
 
 		//then
 		then(tokenRepository).should(times(1)).storeToken(anyString(), anyString());
-		then(eventService).should(times(1)).sendEvent(any());
+		then(eventService).should(times(1)).publish(any());
 	}
 }

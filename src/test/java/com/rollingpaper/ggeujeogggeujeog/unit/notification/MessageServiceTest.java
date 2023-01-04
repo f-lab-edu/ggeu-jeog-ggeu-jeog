@@ -47,6 +47,6 @@ class MessageServiceTest {
 
 		//then
 		then(notificationRepository).should(times(1)).saveEntity(any());
-		then(eventService).should(times(1)).sendEvent(any());
+		then(eventService).should(times(1)).publish(any());
 	}
 }

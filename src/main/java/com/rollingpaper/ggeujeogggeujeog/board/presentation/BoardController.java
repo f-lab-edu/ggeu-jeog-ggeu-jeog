@@ -71,9 +71,10 @@ public class BoardController {
 
     @GetMapping("/boards/open")
     public ResponseEntity<BoardsResponseDto> getOpenedBoards(
-        @RequestParam(required = false, value = "opened", defaultValue = "true") boolean isOpened
+        @RequestParam(required = false, value = "opened", defaultValue = "true") boolean isOpened,
+        @RequestParam(required = false, value = "page", defaultValue = "10")  int pageSize
     ) {
-        BoardsResponseDto dto = boardService.getBoards(isOpened);
+        BoardsResponseDto dto = boardService.getBoards(isOpened, pageSize);
         return ResponseEntity.ok(dto);
     }
 
