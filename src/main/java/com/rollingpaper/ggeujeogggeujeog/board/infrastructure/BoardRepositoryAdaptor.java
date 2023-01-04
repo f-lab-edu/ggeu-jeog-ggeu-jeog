@@ -42,8 +42,8 @@ public class BoardRepositoryAdaptor implements BoardRepository {
 	}
 
 	@Override
-	public List<Board> findAllBoards(boolean isOpened) {
-		return boardMapper.findAllBoards(isOpened);
+	public List<Board> findAllBoards(boolean isOpened, int pageSize) {
+		return boardMapper.findAllBoards(isOpened, pageSize);
 	}
 
 	@Override

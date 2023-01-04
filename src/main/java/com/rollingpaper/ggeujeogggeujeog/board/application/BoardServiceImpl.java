@@ -78,8 +78,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional(readOnly = true)
-    public BoardsResponseDto getBoards(boolean isOpened) {
-        List<Board> boards = boardRepository.findAllBoards(isOpened);
+    public BoardsResponseDto getBoards(boolean isOpened, int pageSize) {
+        List<Board> boards = boardRepository.findAllBoards(isOpened, pageSize);
         return new BoardsResponseDto(boards);
     }
 

@@ -134,11 +134,12 @@ class BoardServiceImplTest {
     @DisplayName("공개된 전체 보드를 검색한다.")
     void findALLOpenedBoards() {
         //given
-        given(boardRepository.findAllBoards(anyBoolean()))
+        given(boardRepository.findAllBoards(anyBoolean(), anyInt()))
             .willReturn(Arrays.asList(TestBoard.BOARD3, TestBoard.BOARD4));
+        int pageSize = 10;
 
         //when
-        BoardsResponseDto dto = boardService.getBoards(true);
+        BoardsResponseDto dto = boardService.getBoards(true, pageSize);
 
         //then
         assertThat(dto.getBoardList().size()).isEqualTo(2);
