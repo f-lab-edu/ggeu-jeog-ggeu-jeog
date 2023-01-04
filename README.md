@@ -31,6 +31,7 @@
 - Nginx
 - Jenkins
 - JMeter
+- Pinpoint, Promethus, Grafana
 
 ## 📎 발생한 이슈 정리
 
