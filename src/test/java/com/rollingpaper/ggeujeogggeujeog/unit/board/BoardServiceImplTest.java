@@ -21,13 +21,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardServiceImpl;
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
+import com.rollingpaper.ggeujeogggeujeog.board.domain.BoardRepository;
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Theme;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.BoardOwnerException;
-import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardMapper;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardSearchRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardsResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.user.application.UserService;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
 class BoardServiceImplTest {
@@ -36,7 +37,7 @@ class BoardServiceImplTest {
     private BoardServiceImpl boardService;
 
     @Mock
-    private BoardMapper boardMapper;
+    private BoardRepository boardRepository;
 
     @Mock
     private UserService userService;
@@ -61,8 +62,8 @@ class BoardServiceImplTest {
 
         boardService.register(boardDto, TestUser.USER1.getId());
 
-        then(boardMapper).should(times(1)).save(any());
-        then(boardMapper).shouldHaveNoMoreInteractions();
+        then(boardRepository).should(times(1)).save(any());
+        then(boardRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -74,7 +75,7 @@ class BoardServiceImplTest {
             .theme(TestBoard.BOARD1.getTheme())
             .isOpened(TestBoard.BOARD1.isOpened())
             .build();
-        given(boardMapper.findById(anyLong())).willReturn(Optional.of(TestBoard.BOARD1));
+        given(boardRepository.findById(anyLong())).willReturn(Optional.of(TestBoard.BOARD1));
         given(boardService.checkBoardOwner(eq(1L), TestUser.USER1)).willThrow(BoardOwnerException.class);
 
         //then
@@ -88,7 +89,7 @@ class BoardServiceImplTest {
     @DisplayName("소유자가 아닐 경우 보드를 삭제할 수 없다.")
     void deleteBoardNotMine() {
         //given
-        given(boardMapper.findById(anyLong())).willReturn(Optional.of(TestBoard.BOARD1));
+        given(boardRepository.findById(anyLong())).willReturn(Optional.of(TestBoard.BOARD1));
         given(boardService.checkBoardOwner(eq(1L), TestUser.USER1)).willThrow(BoardOwnerException.class);
 
         //then
@@ -102,13 +103,13 @@ class BoardServiceImplTest {
     @DisplayName("소유자가 보드를 삭제한다.")
     void deleteMyBoard() {
         //given
-        given(boardMapper.findById(anyLong())).willReturn(Optional.ofNullable(TestBoard.BOARD1));
+        given(boardRepository.findById(anyLong())).willReturn(Optional.ofNullable(TestBoard.BOARD1));
 
         //when
         boardService.deleteBoard(TestBoard.BOARD1.getId(), TestUser.USER1);
 
         //then
-        then(boardMapper).should(times(1)).delete(anyLong());
+        then(boardRepository).should(times(1)).delete(anyLong());
     }
 
     @Test
@@ -120,24 +121,25 @@ class BoardServiceImplTest {
             .theme(TestBoard.BOARD1.getTheme())
             .isOpened(TestBoard.BOARD1.isOpened())
             .build();
-        given(boardMapper.findById(anyLong())).willReturn(Optional.ofNullable(TestBoard.BOARD1));
+        given(boardRepository.findById(anyLong())).willReturn(Optional.ofNullable(TestBoard.BOARD1));
 
         //when
         boardService.updateBoard(dto, TestBoard.BOARD1.getId(), TestUser.USER1);
 
         //then
-        then(boardMapper).should(times(1)).update(any());
+        then(boardRepository).should(times(1)).update(any());
     }
 
     @Test
     @DisplayName("공개된 전체 보드를 검색한다.")
     void findALLOpenedBoards() {
         //given
-        given(boardMapper.findAllBoards(anyBoolean()))
+        given(boardRepository.findAllBoards(anyBoolean(), anyInt()))
             .willReturn(Arrays.asList(TestBoard.BOARD3, TestBoard.BOARD4));
+        int pageSize = 10;
 
         //when
-        BoardsResponseDto dto = boardService.getBoards(true);
+        BoardsResponseDto dto = boardService.getBoards(true, pageSize);
 
         //then
         assertThat(dto.getBoardList().size()).isEqualTo(2);
@@ -153,7 +155,7 @@ class BoardServiceImplTest {
             tagNames, isOpened
         );
         List<Board> boards = Arrays.asList(TestBoard.BOARD1);
-        given(boardMapper.findAllTaggedBoards(any(), anyBoolean())).willReturn(boards);
+        given(boardRepository.findAllTaggedBoards(any(), anyBoolean())).willReturn(boards);
 
         //when
         BoardsResponseDto dto = boardService.getBoards(requestDto);
@@ -177,5 +179,20 @@ class BoardServiceImplTest {
 
         //then
         assertThat(dto.getBoardList().size()).isZero();
+    }
+
+    @Test
+    @DisplayName("관리자는 모든 보드를  소유한다.")
+    void UpdateAndDeleteWithAdminRole() {
+        //given
+        User admin = TestUser.USER1;
+        Long boardId = TestBoard.BOARD1.getId();
+        given(boardRepository.findById(any())).willReturn(Optional.ofNullable(TestBoard.BOARD1));
+
+        //when
+        Board board = boardService.checkBoardOwner(boardId, admin);
+
+        //then
+        assertThat(board).isEqualTo(TestBoard.BOARD1);
     }
 }

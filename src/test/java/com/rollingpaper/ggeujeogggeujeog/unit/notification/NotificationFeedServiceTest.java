@@ -16,8 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.notification.application.NotificationFeedService;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
+import com.rollingpaper.ggeujeogggeujeog.notification.domain.NotificationRepository;
 import com.rollingpaper.ggeujeogggeujeog.notification.exception.NoSuchNotification;
-import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.NotificationMapper;
 
 @ExtendWith(MockitoExtension.class)
 class NotificationFeedServiceTest {
@@ -26,7 +26,7 @@ class NotificationFeedServiceTest {
 	private NotificationFeedService notificationFeedService;
 
 	@Mock
-	private NotificationMapper notificationMapper;
+	private NotificationRepository notificationRepository;
 
 	@Test
 	@DisplayName("알림 리스트를 사용자 id를 통해 조회한다.")
@@ -35,14 +35,14 @@ class NotificationFeedServiceTest {
 		notificationFeedService.getUserNotifications(TestUser.USER1.getId());
 
 		//then
-		then(notificationMapper).should(times(1)).findAllByUserId(anyLong());
+		then(notificationRepository).should(times(1)).findAllByUserId(anyLong());
 	}
 
 	@Test
 	@DisplayName("알림을 id를 통해 조회한다.")
 	void findNotification() {
 		//given
-		given(notificationMapper.findNotificationById(anyLong())).willReturn(
+		given(notificationRepository.findNotificationById(anyLong())).willReturn(
 			Optional.of(TestNotification.NOTIFICATION1)
 		);
 
@@ -59,7 +59,7 @@ class NotificationFeedServiceTest {
 	@DisplayName("알림이 삭제할 때, 알림이 없다면 예외가 발생한다.")
 	void deleteNotificationWithException() {
 		//given
-		given(notificationMapper.findNotificationById(anyLong())).willThrow(NoSuchNotification.class);
+		given(notificationRepository.findNotificationById(anyLong())).willThrow(NoSuchNotification.class);
 
 		//when, then
 		Assertions.assertThrows(NoSuchNotification.class,
@@ -73,7 +73,7 @@ class NotificationFeedServiceTest {
 	@DisplayName("현재 알림을 조회한 뒤, 삭제한다.")
 	void deleteNotification() {
 		//given
-		given(notificationMapper.findNotificationById(anyLong())).willReturn(
+		given(notificationRepository.findNotificationById(anyLong())).willReturn(
 			Optional.of(TestNotification.NOTIFICATION1)
 		);
 
@@ -81,6 +81,6 @@ class NotificationFeedServiceTest {
 		notificationFeedService.deleteNotification(TestNotification.NOTIFICATION1.getId());
 
 		//then
-		then(notificationMapper).should(times(1)).update(any());
+		then(notificationRepository).should(times(1)).update(any());
 	}
 }

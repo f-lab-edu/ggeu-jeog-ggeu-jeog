@@ -26,7 +26,7 @@ import com.rollingpaper.ggeujeogggeujeog.common.fixture.ImageTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.PaperTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.paper.application.PaperService;
-import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.ImageStorage;
+import com.rollingpaper.ggeujeogggeujeog.paper.domain.ImageStorage;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.PaperController;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperUpdateRequestDto;

@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
 
-@Repository
 @Mapper
 public interface BoardMapper {
 
@@ -22,7 +20,7 @@ public interface BoardMapper {
 
     Optional<Board> findById(Long boardId);
 
-	List<Board> findAllBoards(boolean isOpened);
+	List<Board> findAllBoards(boolean isOpened, int pageSize);
 
 	List<Board> findAllTaggedBoards(List<String> tagNames, boolean isOpened);
 

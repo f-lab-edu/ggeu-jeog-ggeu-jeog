@@ -21,9 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.rollingpaper.ggeujeogggeujeog.common.fixture.ImageTestFixture;
 import com.rollingpaper.ggeujeogggeujeog.paper.application.PaperServiceImpl;
 import com.rollingpaper.ggeujeogggeujeog.paper.domain.Paper;
+import com.rollingpaper.ggeujeogggeujeog.paper.domain.PaperRepository;
 import com.rollingpaper.ggeujeogggeujeog.paper.exception.NoSuchPaperException;
-import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.ImageStorage;
-import com.rollingpaper.ggeujeogggeujeog.paper.infrastructure.PaperMapper;
+import com.rollingpaper.ggeujeogggeujeog.paper.domain.ImageStorage;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperUpdateRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.paper.presentation.dto.PaperWriteRequest;
@@ -35,7 +35,7 @@ class PaperServiceTest {
 	private PaperServiceImpl paperServiceImpl;
 
 	@Mock
-	private PaperMapper paperMapper;
+	private PaperRepository paperRepository;
 
 	@Mock
 	private ImageStorage imageStorage;
@@ -58,7 +58,7 @@ class PaperServiceTest {
 
 		//then
 		then(imageStorage).should(times(1)).store(any());
-		then(paperMapper).should(times(1)).save(any());
+		then(paperRepository).should(times(1)).save(any());
 	}
 
 	@Test
@@ -68,27 +68,27 @@ class PaperServiceTest {
 		paperServiceImpl.findAllPapers(TestBoard.BOARD1.getId(), 10);
 
 		//then
-		then(paperMapper).should(times(1)).findAll(anyLong(), anyInt());
+		then(paperRepository).should(times(1)).findAll(anyLong(), anyInt());
 	}
 
 	@Test
 	@DisplayName("페이퍼 id를 통해 조회한다.")
 	void findPaper() {
 		//given
-		given(paperMapper.findById(any())).willReturn(Optional.of(TestPaper.PAPER1));
+		given(paperRepository.findById(any())).willReturn(Optional.of(TestPaper.PAPER1));
 
 		//when
 		paperServiceImpl.getPaper(TestPaper.PAPER1.getId());
 
 		//then
-		then(paperMapper).should(times(1)).findById(any());
+		then(paperRepository).should(times(1)).findById(any());
 	}
 
 	@Test
 	@DisplayName("페이퍼 조회에 실패한다.")
 	void findPaperWithNoSuchPaper() {
 		//given
-		given(paperMapper.findById(any())).willReturn(Optional.ofNullable(null));
+		given(paperRepository.findById(any())).willReturn(Optional.ofNullable(null));
 
 		//then
 		assertThrows(NoSuchPaperException.class, () -> paperServiceImpl.getPaper(any()));
@@ -99,7 +99,7 @@ class PaperServiceTest {
 	void findAllByUserId() {
 		//given
 		List<Paper> papers = Arrays.asList(TestPaper.PAPER1, TestPaper.PAPER2);
-		when(paperMapper.findAllByUserId(anyLong(), anyInt())).thenReturn(papers);
+		when(paperRepository.findAllByUserId(anyLong(), anyInt())).thenReturn(papers);
 
 		//when
 		List<PaperResponseDto> papersByUser = paperServiceImpl.findAllByUserId(TestUser.USER1.getId(), 10);
@@ -126,7 +126,7 @@ class PaperServiceTest {
 		paperServiceImpl.writePaper(paperWriteRequest);
 
 		//then
-		then(paperMapper).should(times(1)).save(any());
+		then(paperRepository).should(times(1)).save(any());
 	}
 
 	@Test
@@ -136,7 +136,7 @@ class PaperServiceTest {
 		paperServiceImpl.delete(TestPaper.PAPER1.getId());
 
 		//then
-		then(paperMapper).should(times(1)).delete(anyLong());
+		then(paperRepository).should(times(1)).delete(anyLong());
 	}
 
 	@Test
@@ -149,13 +149,13 @@ class PaperServiceTest {
 			TestPaper.PAPER2.getContentMeta()
 		);
 		given(imageStorage.store(ImageTestFixture.MOCK_JPEG_FILE)).willReturn("/" + ImageTestFixture.IMAGE_NAME1);
-		given(paperMapper.findById(anyLong())).willReturn(Optional.of(TestPaper.PAPER1));
+		given(paperRepository.findById(anyLong())).willReturn(Optional.of(TestPaper.PAPER1));
 
 		//when
 		paperServiceImpl.update(paperUpdateRequestDto, ImageTestFixture.MOCK_JPEG_FILE, TestPaper.PAPER1.getId());
 
 		//then
-		then(paperMapper).should(times(1)).update(any());
+		then(paperRepository).should(times(1)).update(any());
 		then(imageStorage).should(times(1)).store(any());
 	}
 
@@ -169,13 +169,13 @@ class PaperServiceTest {
 			TestPaper.PAPER2.getContentMeta()
 		);
 		given(imageStorage.store(null)).willReturn("");
-		given(paperMapper.findById(anyLong())).willReturn(Optional.of(TestPaper.PAPER1));
+		given(paperRepository.findById(anyLong())).willReturn(Optional.of(TestPaper.PAPER1));
 
 		//when
 		paperServiceImpl.update(paperUpdateRequestDto, null, TestPaper.PAPER1.getId());
 
 		//then
-		then(paperMapper).should(times(1)).update(any());
+		then(paperRepository).should(times(1)).update(any());
 		then(imageStorage).should(times(1)).store(any());
 	}
 }
