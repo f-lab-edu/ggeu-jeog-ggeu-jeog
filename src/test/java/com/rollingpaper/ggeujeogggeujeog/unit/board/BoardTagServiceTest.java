@@ -22,11 +22,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardTagService;
+import com.rollingpaper.ggeujeogggeujeog.board.domain.BoardTagRepository;
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Tag;
+import com.rollingpaper.ggeujeogggeujeog.board.domain.TagRepository;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.DuplicatedTagsInBoardException;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.NoSuchTagException;
-import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardTagMapper;
-import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.TagMapper;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardTagRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
@@ -40,10 +40,10 @@ public class BoardTagServiceTest {
 	private BoardService boardService;
 
 	@Mock
-	private BoardTagMapper boardTagMapper;
+	private BoardTagRepository boardTagRepository;
 
 	@Mock
-	private TagMapper tagMapper;
+	private TagRepository tagRepository;
 
 	@Test
 	@DisplayName("하나의 보드에 중복된 태그를 달 수 없다.")
@@ -60,7 +60,7 @@ public class BoardTagServiceTest {
 		BoardTagRequestDto dto = new BoardTagRequestDto(duplicatedTagNames);
 		Long boardId = BOARD1.getId();
 		User user = USER1;
-		given(tagMapper.findDuplicatedTags(any(), any())).willReturn(duplicatedTag);
+		given(tagRepository.findDuplicatedTags(any(), any())).willReturn(duplicatedTag);
 		given(boardService.checkBoardOwner(any(), any())).willReturn(BOARD1);
 
 		//when, then
@@ -80,15 +80,15 @@ public class BoardTagServiceTest {
 		);
 		Long boardId = BOARD1.getId();
 		User user = USER1;
-		given(tagMapper.findDuplicatedTags(any(), any())).willReturn(Collections.emptyList());
+		given(tagRepository.findDuplicatedTags(any(), any())).willReturn(Collections.emptyList());
 		given(boardService.checkBoardOwner(any(), any())).willReturn(BOARD1);
 
 		//when
 		boardTagService.addBoardTags(dto, boardId, user);
 
 		//then
-		then(tagMapper).should(times(1)).insertTag(any());
-		then(boardTagMapper).should(times(1)).insertBoardTag(any(), any());
+		then(tagRepository).should(times(1)).insertTag(any());
+		then(boardTagRepository).should(times(1)).insertBoardTag(any(), any());
 	}
 
 	@ParameterizedTest
@@ -102,13 +102,13 @@ public class BoardTagServiceTest {
 		Long boardId = BOARD1.getId();
 		User user = USER1;
 		given(boardService.checkBoardOwner(any(), any())).willReturn(BOARD1);
-		given(tagMapper.findByBoardIdAndTagName(any(), any())).willReturn(Optional.of(TAG1));
+		given(tagRepository.findByBoardIdAndTagName(any(), any())).willReturn(Optional.of(TAG1));
 
 		//when
 		boardTagService.removeBoardTags(dto, boardId, user);
 
 		//then
-		then(boardTagMapper).should(times(1)).removeBoardTag(any(), any());
+		then(boardTagRepository).should(times(1)).removeBoardTag(any(), any());
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class BoardTagServiceTest {
 		Long boardId = BOARD1.getId();
 		User user = USER1;
 		given(boardService.checkBoardOwner(any(), any())).willReturn(BOARD1);
-		given(tagMapper.findByBoardIdAndTagName(any(), any())).willThrow(NoSuchTagException.class);
+		given(tagRepository.findByBoardIdAndTagName(any(), any())).willThrow(NoSuchTagException.class);
 
 		//when, then
 		Assertions.assertThrows(NoSuchTagException.class,

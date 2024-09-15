@@ -70,7 +70,7 @@ spring:
   sql:
     init:
       mode: always
-      data-locations: classpath:schema/schema.sql, classpath:schema/data.sql
+      data-locations: classpath:schema/schema.sql, classpath:schema/data/data.sql
 
 mybatis:
   mapper-locations: classpath:/mybatis/mapper/*.xml

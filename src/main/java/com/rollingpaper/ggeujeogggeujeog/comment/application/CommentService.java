@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
 import com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment;
+import com.rollingpaper.ggeujeogggeujeog.comment.domain.CommentRepository;
 import com.rollingpaper.ggeujeogggeujeog.comment.exception.CommentAlreadyExistException;
 import com.rollingpaper.ggeujeogggeujeog.comment.exception.NoSuchCommentException;
-import com.rollingpaper.ggeujeogggeujeog.comment.infrastructure.CommentMapper;
 import com.rollingpaper.ggeujeogggeujeog.comment.presentation.dto.CommentResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.comment.presentation.dto.CommentWriteRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
@@ -21,28 +21,28 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CommentService {
 
-	private final CommentMapper commentMapper;
+	private final CommentRepository commentRepository;
 	private final BoardService boardService;
 
 	@Transactional
 	public void writeComment(CommentWriteRequestDto dto, Long boardId, Long paperId, User user) {
 		boardService.checkBoardOwner(boardId, user);
-		if(commentMapper.findByPaperId(paperId).isPresent()) {
+		if(commentRepository.findByPaperId(paperId).isPresent()) {
 			throw new CommentAlreadyExistException();
 		}
-		commentMapper.save(dto.toEntity(dto, paperId, user.getId()));
+		commentRepository.save(dto.toEntity(dto, paperId, user.getId()));
 	}
 
 	@Transactional(readOnly = true)
 	public CommentResponseDto getCommentByPaperId(Long paperId) {
-		Comment comment = commentMapper.findByPaperId(paperId)
+		Comment comment = commentRepository.findByPaperId(paperId)
 			.orElseThrow(NoSuchCommentException::new);
 		return CommentResponseDto.from(comment);
 	}
 
 	@Transactional(readOnly = true)
 	public List<CommentResponseDto> getCommentsByUser(Long userId, int page) {
-		return commentMapper.findAllByUserId(userId, page)
+		return commentRepository.findAllByUserId(userId, page)
 			.stream()
 			.map(comment -> new CommentResponseDto(
 				comment.getContent(),
@@ -53,14 +53,14 @@ public class CommentService {
 
 	@Transactional
 	public void deleteComment(Long boardId, Long paperId, User user) {
-		commentMapper.findByPaperId(paperId).orElseThrow(NoSuchCommentException::new);
+		commentRepository.findByPaperId(paperId).orElseThrow(NoSuchCommentException::new);
 		boardService.checkBoardOwner(boardId, user);
-		commentMapper.delete(paperId);
+		commentRepository.delete(paperId);
 	}
 
 	@Transactional
 	public void updateComment(CommentWriteRequestDto dto, Long boardId, Long paperId, User user) {
 		boardService.checkBoardOwner(boardId, user);
-		commentMapper.update(CommentWriteRequestDto.toEntity(dto, paperId, user.getId()));
+		commentRepository.update(CommentWriteRequestDto.toEntity(dto, paperId, user.getId()));
 	}
 }

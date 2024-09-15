@@ -21,9 +21,9 @@ import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignInR
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.SignUpRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.VerifyEmailRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.UserRepository;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.DuplicatedEmailException;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
-import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
 
 @ExtendWith(MockitoExtension.class)
 class SessionLoginServiceTest {
@@ -32,7 +32,7 @@ class SessionLoginServiceTest {
 	private SessionLoginService sessionLoginService;
 
 	@Mock
-	private UserMapper userMapper;
+	private UserRepository userRepository;
 
 	@Mock
 	private HttpSession httpSession;
@@ -48,7 +48,7 @@ class SessionLoginServiceTest {
 	void signIn() {
 		//given
 		SignInRequestDto dto = new SignInRequestDto(TestUser.USER1.getEmail(), TestUser.USER1.getPassword());
-		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(TestUser.USER1));
+		given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(TestUser.USER1));
 		given(passwordEncoder.matches(TestUser.USER1.getPassword(), TestUser.USER1.getPassword())).willReturn(true);
 
 		//when
@@ -63,7 +63,7 @@ class SessionLoginServiceTest {
 	void signInWithEmailNotFound() {
 		//given
 		SignInRequestDto dto = new SignInRequestDto(TestUser.USER1.getEmail(), TestUser.USER1.getPassword());
-		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(null));
+		given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(null));
 
 		//then
 		assertThrows(NoSuchUserException.class, () -> sessionLoginService.signIn(dto));
@@ -74,7 +74,7 @@ class SessionLoginServiceTest {
 	void signInWithPasswordNotFound() {
 		//given
 		SignInRequestDto dto = new SignInRequestDto(TestUser.USER1.getEmail(), TestUser.USER1.getPassword());
-		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(TestUser.USER1));
+		given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(TestUser.USER1));
 		given(passwordEncoder.matches(any(), any())).willReturn(false);
 
 		//then
@@ -90,13 +90,13 @@ class SessionLoginServiceTest {
 			.password(TestUser.USER1.getPassword())
 			.nickname(TestUser.USER1.getNickname())
 			.build();
-		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(null));
+		given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(null));
 
 		//when
 		sessionLoginService.register(dto);
 
 		//then
-		then(userMapper).should(times(1)).save(any());
+		then(userRepository).should(times(1)).save(any());
 	}
 
 	@Test
@@ -108,7 +108,7 @@ class SessionLoginServiceTest {
 			.password(TestUser.USER1.getPassword())
 			.nickname(TestUser.USER1.getNickname())
 			.build();
-		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(SignUpRequestDto.toEntity(dto)));
+		given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(SignUpRequestDto.toEntity(dto)));
 
 		//then
 		assertThrows(DuplicatedEmailException.class, () -> sessionLoginService.register(dto));
@@ -123,15 +123,15 @@ class SessionLoginServiceTest {
 			.password(TestUser.USER1.getPassword())
 			.nickname(TestUser.USER1.getNickname())
 			.build();
-		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(null));
+		given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(null));
 		given(passwordEncoder.encode(any())).willReturn("encoded-Password");
 
 		//when
 		sessionLoginService.register(dto);
 
 		//then
-		then(userMapper).should(times(1)).findByEmail(dto.getEmail());
-		then(userMapper).should(times(1)).save(any());
+		then(userRepository).should(times(1)).findByEmail(dto.getEmail());
+		then(userRepository).should(times(1)).save(any());
 		then(emailVerificationService).should(times(1)).sendRegistrationMail(any(), any());
 	}
 
@@ -143,12 +143,13 @@ class SessionLoginServiceTest {
 			"test@email.com",
 			"token"
 		);
-		given(userMapper.findByEmail(any())).willReturn(Optional.ofNullable(TestUser.USER1));
+		given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(TestUser.USER1));
 
 		//when
 		sessionLoginService.confirmRegistration(dto);
 
 		//then
-		then(userMapper).should(times(1)).update(TestUser.USER1);
+		then(emailVerificationService).should(times(1))
+			.verify(any(), anyString());
 	}
 }

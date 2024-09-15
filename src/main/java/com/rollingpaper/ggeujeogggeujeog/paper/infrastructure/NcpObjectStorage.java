@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.rollingpaper.ggeujeogggeujeog.common.util.FileNameUtil;
+import com.rollingpaper.ggeujeogggeujeog.paper.domain.ImageStorage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,10 @@ public class NcpObjectStorage implements ImageStorage {
 
 	@Override
 	public String store(MultipartFile imageFile) {
+
+		if (imageFile.isEmpty()) {
+			return "";
+		}
 		ObjectMetadata objectMetadata = createObjectMetadata(imageFile);
 		String fileName = FileNameUtil.createStoredFileName(imageFile.getOriginalFilename());
 		try {

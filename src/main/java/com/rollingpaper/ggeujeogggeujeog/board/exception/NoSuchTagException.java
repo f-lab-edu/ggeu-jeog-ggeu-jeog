@@ -2,8 +2,8 @@ package com.rollingpaper.ggeujeogggeujeog.board.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.rollingpaper.ggeujeogggeujeog.common.exception.BaseException;
-import com.rollingpaper.ggeujeogggeujeog.common.exception.ExceptionCode;
+import com.rollingpaper.ggeujeogggeujeog.common.error.BaseException;
+import com.rollingpaper.ggeujeogggeujeog.common.error.ExceptionCode;
 
 public class NoSuchTagException extends BaseException {
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rollingpaper.ggeujeogggeujeog.common.util.FileNameUtil;
+import com.rollingpaper.ggeujeogggeujeog.paper.domain.ImageStorage;
 
 import lombok.extern.slf4j.Slf4j;
 

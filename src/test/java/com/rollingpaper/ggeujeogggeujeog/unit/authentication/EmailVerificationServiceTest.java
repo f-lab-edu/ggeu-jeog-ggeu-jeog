@@ -3,8 +3,6 @@ package com.rollingpaper.ggeujeogggeujeog.unit.authentication;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import javax.mail.MessagingException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +11,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.rollingpaper.ggeujeogggeujeog.authentication.application.EmailVerificationService;
-import com.rollingpaper.ggeujeogggeujeog.authentication.domain.EmailMessage;
-import com.rollingpaper.ggeujeogggeujeog.authentication.infrastructure.EmailSender;
-import com.rollingpaper.ggeujeogggeujeog.authentication.infrastructure.TokenRepository;
+import com.rollingpaper.ggeujeogggeujeog.authentication.domain.TokenRepository;
+import com.rollingpaper.ggeujeogggeujeog.authentication.exception.NotSameTokenException;
+import com.rollingpaper.ggeujeogggeujeog.common.fixture.UserTestFixture;
+import com.rollingpaper.ggeujeogggeujeog.event.application.EventService;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class EmailVerificationServiceTest {
@@ -27,7 +28,10 @@ class EmailVerificationServiceTest {
 	private TokenRepository tokenRepository;
 
 	@Mock
-	private EmailSender emailSender;
+	private EventService eventService;
+
+	@Mock
+	private UserRepository userRepository;
 
 	@Test
 	@DisplayName("저장소에 토큰이 없다면 예외가 발생한다.")
@@ -38,7 +42,7 @@ class EmailVerificationServiceTest {
 		//then
 		assertThrows(
 			IllegalArgumentException.class,
-			() -> emailVerificationService.verify("test@email.com", "token")
+			() -> emailVerificationService.verify(UserTestFixture.TestUser.USER1, "token")
 		);
 	}
 
@@ -50,22 +54,38 @@ class EmailVerificationServiceTest {
 
 		//then
 		assertThrows(
-			IllegalArgumentException.class,
-			() -> emailVerificationService.verify("test@email.com", "not-same")
+			NotSameTokenException.class,
+			() -> emailVerificationService.verify(UserTestFixture.TestUser.USER1, "not-same")
 		);
 	}
 
 	@Test
-	@DisplayName("이메일 전송에 실패할 경우, 예외가 발생한다.")
-	void throwExceptionWhenFailedToSend() throws MessagingException {
+	@DisplayName("토큰 값을 검증한 뒤, 회원 권한을 업데이트한다.")
+	void updateUserAfterEmailVerification() {
 		//given
-		willThrow(MessagingException.class).given(emailSender).sendEmail(isA(EmailMessage.class));
+		User testUser = UserTestFixture.TestUser.USER1;
+		String testToken = "token";
+		given(tokenRepository.getToken(anyString())).willReturn("token");
+
+		//when
+		emailVerificationService.verify(testUser, testToken);
 
 		//then
-		then(tokenRepository).should(never()).storeToken(anyString(), anyString());
-		assertThrows(
-			IllegalArgumentException.class,
-			() -> emailVerificationService.sendRegistrationMail("test@email.com", "token")
-		);
+		then(userRepository).should(times(1)).update(any());
+	}
+
+	@Test
+	@DisplayName("회원 가입 후 토큰을 저장하고 이메일 이벤트를 큐에 넣는다.")
+	void storeTokenAndSendEmailAfterRegistration() {
+		//given
+		User testUser = UserTestFixture.TestUser.USER1;
+		String testToken = "token";
+
+		//when
+		emailVerificationService.sendRegistrationMail(testUser, testToken);
+
+		//then
+		then(tokenRepository).should(times(1)).storeToken(anyString(), anyString());
+		then(eventService).should(times(1)).publish(any());
 	}
 }

@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.Notification;
 
-@Repository
 @Mapper
 public interface NotificationMapper {
 
