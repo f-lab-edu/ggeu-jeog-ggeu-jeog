@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure;
+package com.rollingpaper.ggeujeogggeujeog.event.infrastructure;
 
 import org.joda.time.LocalDateTime;
 import org.quartz.DisallowConcurrentExecution;
@@ -25,7 +25,7 @@ public class NotificationSendingJob extends QuartzJobBean {
 	@SneakyThrows
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		log.debug("-------------------------------- quartz job started --------------------------------");
+		log.info("Batch Task : NotificationSendingJob Start.");
 		JobParameters jobParameters = new JobParametersBuilder()
 				.addDate("Date", LocalDateTime.now().toDate())
 				.toJobParameters();

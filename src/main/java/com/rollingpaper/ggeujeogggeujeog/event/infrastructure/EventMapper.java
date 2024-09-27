@@ -1,16 +1,14 @@
-package com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure;
+package com.rollingpaper.ggeujeogggeujeog.event.infrastructure;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
-import com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event;
+import com.rollingpaper.ggeujeogggeujeog.event.domain.Event;
 
-@Repository
 @Mapper
-public interface OutBoxMapper {
+public interface EventMapper {
 
 	void saveEvent(Event event);
 

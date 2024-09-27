@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Board;
 
-@Repository
 @Mapper
 public interface BoardMapper {
 

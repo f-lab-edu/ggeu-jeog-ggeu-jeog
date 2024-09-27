@@ -36,7 +36,7 @@ public class PaperController {
 	@PostMapping("/boards/{boardId}/rollingpapers")
 	public ResponseEntity<Void> writePaper(
 		@RequestPart(value = "request") @Valid PaperWriteRequestDto dto,
-		@RequestPart(value = "image") MultipartFile imageFile,
+		@RequestPart(value = "image", required = false) MultipartFile imageFile,
 		@PathVariable Long boardId,
 		@CurrentUser User user
 	) {
@@ -66,7 +66,7 @@ public class PaperController {
 	@PostMapping("/boards/{boardId}/rollingpapers/{paperId}")
 	public ResponseEntity<Void> update(
 		@RequestPart(value = "request") @Valid PaperUpdateRequestDto dto,
-		@RequestPart(value = "image") MultipartFile imageFile,
+		@RequestPart(value = "image", required = false) MultipartFile imageFile,
 		@PathVariable Long paperId
 	) {
 		paperService.update(dto, imageFile, paperId);

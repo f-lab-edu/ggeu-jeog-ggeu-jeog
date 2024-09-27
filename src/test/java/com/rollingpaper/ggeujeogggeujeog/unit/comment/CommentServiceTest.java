@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.rollingpaper.ggeujeogggeujeog.board.application.BoardService;
 import com.rollingpaper.ggeujeogggeujeog.comment.application.CommentService;
 import com.rollingpaper.ggeujeogggeujeog.comment.domain.Comment;
-import com.rollingpaper.ggeujeogggeujeog.comment.infrastructure.CommentMapper;
+import com.rollingpaper.ggeujeogggeujeog.comment.domain.CommentRepository;
 import com.rollingpaper.ggeujeogggeujeog.comment.presentation.dto.CommentResponseDto;
 import com.rollingpaper.ggeujeogggeujeog.comment.presentation.dto.CommentWriteRequestDto;
 
@@ -32,7 +32,7 @@ class CommentServiceTest {
 	private CommentService commentService;
 
 	@Mock
-	private CommentMapper commentMapper;
+	private CommentRepository commentRepository;
 
 	@Mock
 	private BoardService boardService;
@@ -53,14 +53,14 @@ class CommentServiceTest {
 		);
 
 		//then
-		then(commentMapper).should(times(1)).save(any());
+		then(commentRepository).should(times(1)).save(any());
 	}
 
 	@Test
 	@DisplayName("페이퍼 id를 통해 댓글을 조회한다.")
 	void findCommentByPaperId() {
 		//given
-		given(commentMapper.findByPaperId(any())).willReturn(Optional.of(TestComment.COMMENT1));
+		given(commentRepository.findByPaperId(any())).willReturn(Optional.of(TestComment.COMMENT1));
 
 		//when
 		CommentResponseDto response = commentService.getCommentByPaperId(TestPaper.PAPER1.getId());
@@ -74,7 +74,7 @@ class CommentServiceTest {
 	void findCommentsByUserId() {
 		//given
 		List<Comment> comments = Arrays.asList(TestComment.COMMENT1, TestComment.COMMENT2);
-		when(commentMapper.findAllByUserId(anyLong(), anyInt())).thenReturn(comments);
+		when(commentRepository.findAllByUserId(anyLong(), anyInt())).thenReturn(comments);
 
 		//when
 		List<CommentResponseDto> commentsByUser = commentService.getCommentsByUser(TestUser.USER1.getId(), 10);
@@ -88,13 +88,13 @@ class CommentServiceTest {
 	void deleteComment() {
 		//given
 		given(boardService.checkBoardOwner(anyLong(), any())).willReturn(TestBoard.BOARD1);
-		given(commentMapper.findByPaperId(anyLong())).willReturn(Optional.of(TestComment.COMMENT1));
+		given(commentRepository.findByPaperId(anyLong())).willReturn(Optional.of(TestComment.COMMENT1));
 
 		//when
 		commentService.deleteComment(TestBoard.BOARD1.getId(), TestPaper.PAPER1.getId(), TestUser.USER1);
 
 		//then
-		then(commentMapper).should(times(1)).delete(anyLong());
+		then(commentRepository).should(times(1)).delete(anyLong());
 	}
 
 	@Test
@@ -108,6 +108,6 @@ class CommentServiceTest {
 		commentService.updateComment(dto, TestBoard.BOARD1.getId(), TestPaper.PAPER1.getId(), TestUser.USER1);
 
 		//then
-		then(commentMapper).should(times(1)).update(any());
+		then(commentRepository).should(times(1)).update(any());
 	}
 }

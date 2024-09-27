@@ -1,4 +1,4 @@
-package com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure;
+package com.rollingpaper.ggeujeogggeujeog.event.infrastructure;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;
@@ -11,14 +11,14 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.tasklet.TaskletStep;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.rollingpaper.ggeujeogggeujeog.event.domain.Event;
 import com.rollingpaper.ggeujeogggeujeog.notification.domain.MessageSender;
 import com.rollingpaper.ggeujeogggeujeog.notification.infrastructure.dto.NotificationRequestDto;
-import com.rollingpaper.ggeujeogggeujeog.outbox.domain.Event;
-import com.rollingpaper.ggeujeogggeujeog.outbox.domain.NotificationCreatedEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,52 +28,61 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NotificationBatchTask {
 
+	private static final String JOB_NAME = "notificationSendingJob";
+	private static final String STEP_NAME = "startNotificationStep";
+	private static final String QUERY_ID =
+		"com.rollingpaper.ggeujeogggeujeog.event.infrastructure.EventMapper.findAllNotifications";
+	private static final String STATEMENT_ID =
+		"com.rollingpaper.ggeujeogggeujeog.event.infrastructure.EventMapper.deleteEvent";
+
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final SqlSessionFactory sqlSessionFactory;
-	private final MessageSender firebaseMessageSender;
+	private final MessageSender messageSender;
 
 	@Bean
 	public Job notificationSendingJob() {
-		log.debug("-------------------------------- create job --------------------------------");
-		return jobBuilderFactory.get("notificationSendingJob")
+		Job notificationSendingJob = jobBuilderFactory.get(JOB_NAME)
 			.start(startNotificationStep())
 			.build();
+		log.info("Batch Task : notificationSendingJob created.");
+		return notificationSendingJob;
 	}
 
 	@Bean
 	@JobScope
 	public Step startNotificationStep() {
-		log.debug("-------------------------------- create step --------------------------------");
-		return stepBuilderFactory.get("startNotificationStep")
+		TaskletStep taskletStep = stepBuilderFactory.get(STEP_NAME)
 			.<Event, Event>chunk(100)
-			.reader(EventReader())
-			.processor(EventProcessor())
-			.writer(EventWriter())
+			.reader(NotificationEventReader())
+			.processor(NotificationEventProcessor())
+			.writer(NotificationEventWriter())
 			.build();
+		log.info("Batch Task : Notification taskletStep created.");
+		return taskletStep;
 	}
 
 	@Bean
 	@StepScope
-	public MyBatisPagingItemReader<Event> EventReader() {
-		log.debug("-------------------------------- ItemReader started --------------------------------");
-		return new MyBatisPagingItemReaderBuilder<Event>()
+	public MyBatisPagingItemReader<Event> NotificationEventReader() {
+		MyBatisPagingItemReader<Event> pagingItemReader = new MyBatisPagingItemReaderBuilder<Event>()
 			.pageSize(100)
 			.sqlSessionFactory(sqlSessionFactory)
-			.queryId("com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure.OutBoxMapper.findAllNotifications")
+			.queryId(QUERY_ID)
 			.build();
+		log.info("Batch Task : Notification pagingItemReader created.");
+		return pagingItemReader;
 	}
 
 	@Bean
 	@StepScope
-	public ItemProcessor<Event, Event> EventProcessor() {
-		log.debug("-------------------------------- ItemProcessor started --------------------------------");
+	public ItemProcessor<Event, Event> NotificationEventProcessor() {
 		return new ItemProcessor<Event, Event>() {
 			@Override
 			public Event process(Event event) throws Exception {
 
-				NotificationRequestDto dto = NotificationCreatedEvent.convertEventToDto(event);
-				firebaseMessageSender.sendNotification(dto);
+				NotificationRequestDto dto = NotificationRequestDto.from(event);
+				messageSender.sendNotification(dto);
 
 				event.deleteEvent();
 				return event;
@@ -83,13 +92,13 @@ public class NotificationBatchTask {
 
 	@Bean
 	@StepScope
-	public MyBatisBatchItemWriter<Event> EventWriter() {
-		log.debug("-------------------------------- ItemWriter started --------------------------------");
-		return new MyBatisBatchItemWriterBuilder<Event>()
+	public MyBatisBatchItemWriter<Event> NotificationEventWriter() {
+		MyBatisBatchItemWriter<Event> itemWriter = new MyBatisBatchItemWriterBuilder<Event>()
 			.assertUpdates(false)
 			.sqlSessionFactory(sqlSessionFactory)
-			.statementId("com.rollingpaper.ggeujeogggeujeog.outbox.infrastructure.OutBoxMapper.updateEvent")
+			.statementId(STATEMENT_ID)
 			.build();
+		log.info("Batch Task : Notification itemWriter created");
+		return itemWriter;
 	}
-
 }

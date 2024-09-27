@@ -3,11 +3,11 @@ package com.rollingpaper.ggeujeogggeujeog.board.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rollingpaper.ggeujeogggeujeog.board.domain.BoardTagRepository;
 import com.rollingpaper.ggeujeogggeujeog.board.domain.Tag;
+import com.rollingpaper.ggeujeogggeujeog.board.domain.TagRepository;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.DuplicatedTagsInBoardException;
 import com.rollingpaper.ggeujeogggeujeog.board.exception.NoSuchTagException;
-import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.BoardTagMapper;
-import com.rollingpaper.ggeujeogggeujeog.board.infrastructure.TagMapper;
 import com.rollingpaper.ggeujeogggeujeog.board.presentation.dto.BoardTagRequestDto;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
 
@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 public class BoardTagService {
 
 	private final BoardService boardService;
-	private final BoardTagMapper boardTagMapper;
-	private final TagMapper tagMapper;
+	private final BoardTagRepository boardTagRepository;
+	private final TagRepository tagRepository;
 
 	@Transactional
 	public void addBoardTags(BoardTagRequestDto dto, Long boardId, User currentUser) {
@@ -28,13 +28,13 @@ public class BoardTagService {
 			.forEach(tagName -> {
 				checkDuplicatedTagsInBoard(boardId, tagName);
 				Tag newTag = Tag.createTagUsingName(tagName);
-				tagMapper.insertTag(newTag);
-				boardTagMapper.insertBoardTag(boardId, newTag.getId());
+				tagRepository.insertTag(newTag);
+				boardTagRepository.insertBoardTag(boardId, newTag.getId());
 			});
 	}
 
 	private void checkDuplicatedTagsInBoard(Long boardId, String tagName) {
-		if(!tagMapper.findDuplicatedTags(boardId, tagName).isEmpty())
+		if(!tagRepository.findDuplicatedTags(boardId, tagName).isEmpty())
 			throw new DuplicatedTagsInBoardException();
 	}
 
@@ -43,9 +43,9 @@ public class BoardTagService {
 		boardService.checkBoardOwner(boardId, currentUser);
 		dto.getTagNames()
 			.forEach(tagName -> {
-				Tag tag = tagMapper.findByBoardIdAndTagName(boardId, tagName)
+				Tag tag = tagRepository.findByBoardIdAndTagName(boardId, tagName)
 					.orElseThrow(NoSuchTagException::new);
-				boardTagMapper.removeBoardTag(boardId, tag.getId());
+				boardTagRepository.removeBoardTag(boardId, tag.getId());
 			});
 	}
 }

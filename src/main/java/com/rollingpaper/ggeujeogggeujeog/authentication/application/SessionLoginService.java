@@ -14,9 +14,9 @@ import com.rollingpaper.ggeujeogggeujeog.authentication.presentation.dto.VerifyE
 import com.rollingpaper.ggeujeogggeujeog.common.constant.SessionConst;
 import com.rollingpaper.ggeujeogggeujeog.common.util.PasswordEncoder;
 import com.rollingpaper.ggeujeogggeujeog.user.domain.User;
+import com.rollingpaper.ggeujeogggeujeog.user.domain.UserRepository;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.DuplicatedEmailException;
 import com.rollingpaper.ggeujeogggeujeog.user.exception.NoSuchUserException;
-import com.rollingpaper.ggeujeogggeujeog.user.infrastructure.UserMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +27,14 @@ import lombok.extern.slf4j.Slf4j;
 public class SessionLoginService implements LoginService {
 
 	private final HttpSession httpSession;
-	private final UserMapper userMapper;
+	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final EmailVerificationService emailVerificationService;
 
 	@Override
 	@Transactional(readOnly = true)
 	public void signIn(SignInRequestDto dto) {
-		Optional<User> userOptional = userMapper.findByEmail(dto.getEmail());
+		Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
 		userOptional.orElseThrow(NoSuchUserException::new);
 		User user = userOptional.filter(
 				u -> passwordEncoder.matches(dto.getPassword(), u.getPassword()))
@@ -55,24 +55,23 @@ public class SessionLoginService implements LoginService {
 	@Override
 	@Transactional
 	public void register(SignUpRequestDto dto) {
-		userMapper.findByEmail(dto.getEmail())
+		userRepository.findByEmail(dto.getEmail())
 			.ifPresent(user -> {
 				throw new DuplicatedEmailException();
 			});
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-		userMapper.save(SignUpRequestDto.toEntity(dto));
+		User user = SignUpRequestDto.toEntity(dto);
+		userRepository.save(user);
 		String uuid = UUID.randomUUID().toString();
 		log.debug("{} {} has been created", dto.getEmail(), uuid);
-		emailVerificationService.sendRegistrationMail(dto.getEmail(), uuid);
+		emailVerificationService.sendRegistrationMail(user, uuid);
 	}
 
 	@Override
 	@Transactional
 	public void confirmRegistration(VerifyEmailRequestDto dto) {
-		emailVerificationService.verify(dto.getEmail(), dto.getToken());
-		User user = userMapper.findByEmail(dto.getEmail())
+		User user = userRepository.findByEmail(dto.getEmail())
 			.orElseThrow(NoSuchUserException::new);
-		user.verifiedUser();
-		userMapper.update(user);
+		emailVerificationService.verify(user, dto.getToken());
 	}
 }
